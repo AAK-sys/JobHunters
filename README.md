@@ -46,6 +46,7 @@
         -   Location
     -   Summary
         -   Brief Description
+        -   Display Name
     -   Education
         -   University Name
         -   Degree
@@ -57,7 +58,7 @@
     -   Experience
         -   Company Name
         -   Role
-        -   Name
+        -   Display Name
         -   Start Date (must be in the past)
         -   End Date (must be after start date)
         -   Description
