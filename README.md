@@ -31,8 +31,8 @@
 -   Admin
     -   Can do what users do
     -   Can see all users of the application
-    -   Can add, edit, and delete resume templates (Stretch)
-    -   Can disable, add, and delete user (Stretch)
+    -   Can add, edit, and delete resume templates (Stretch Goal)
+    -   Can disable a user access
 
 ### User Stories/Scenarios
 
@@ -67,3 +67,7 @@
 
 -   User can build resume after selecting Resume Information from their pool of information **(both user and admin)**
 -   User can view, disable, add, and delete any user on the application **(only admins have this ability. Add and delete are stretch goals)**
+
+  ### New Technologies
+-    Tailwind CSS
+-    Deployment (Stretch Goal)
