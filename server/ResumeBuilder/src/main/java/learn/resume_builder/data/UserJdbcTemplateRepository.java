@@ -1,6 +1,5 @@
 package learn.resume_builder.data;
 
-import learn.data.mappers.*;
 import learn.resume_builder.models.User;
 import learn.resume_builder.data.mappers.*;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -77,13 +76,13 @@ public class UserJdbcTemplateRepository implements UserRepository {
     }
 
     @Override
-    public void update(User user) {
+    public boolean update(User user) {
         final String sql = "update user set "
                 + "email = ?, "
                 + "username = ?, "
                 + "disabled = ? "
                 + "where user_id = ?;";
-        jdbcTemplate.update(sql, user.getEmail(), user.getUsername(), user.isDisabled(), user.getUserId());
+        return jdbcTemplate.update(sql, user.getEmail(), user.getUsername(), user.isDisabled(), user.getUserId()) > 0;
         // To implement if needed: updateRoles
     }
 
@@ -107,7 +106,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
     private void addUserInfo(User user) {
         final String sql = "select user_info_id, full_name, email, phone, website, `location`, user_id "
                 + "from user_info "
-                + "where agent_id = ?;";
+                + "where user_id = ?;";
         var userInfo = jdbcTemplate.query(sql, new UserInfoMapper(), user.getUserId()).stream().findFirst().orElse(null);
         user.setUserInfo(userInfo);
     }
@@ -139,9 +138,9 @@ public class UserJdbcTemplateRepository implements UserRepository {
     private void addSkills(User user) {
         final String sql = "select s.skill_id, s.`name` "
                 + "from skill s "
-                + "inner join user_skill us on us.skill_d = s.skill_id "
+                + "inner join user_skill us on us.skill_id = s.skill_id "
                 + "inner join user u on u.user_id = us.user_id "
-                + "where user_id = ?;";
+                + "where u.user_id = ?;";
 
         var skills = jdbcTemplate.query(sql, new SkillMapper(), user.getUserId());
         user.setSkills(skills);

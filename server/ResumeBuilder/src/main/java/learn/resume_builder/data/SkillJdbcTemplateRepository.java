@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -65,8 +66,10 @@ public class SkillJdbcTemplateRepository implements SkillRepository {
     }
 
     @Override
+    @Transactional
     public boolean deleteById(int skillId) {
-        final String sql = "delete from skill where skill_id = ?;";
-        return jdbcTemplate.update(sql, skillId) > 0;
+        // delete from user_skill that associates with skill_id
+        jdbcTemplate.update("delete from user_skill where skill_id = ?;", skillId);
+        return jdbcTemplate.update("delete from skill where skill_id = ?;", skillId) > 0;
     }
 }

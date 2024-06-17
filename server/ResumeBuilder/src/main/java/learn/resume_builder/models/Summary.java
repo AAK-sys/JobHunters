@@ -1,6 +1,7 @@
 package learn.resume_builder.models;
 
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 public class Summary {
     private int summaryId;
@@ -54,5 +55,18 @@ public class Summary {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Summary summary = (Summary) o;
+        return summaryId == summary.summaryId && userId == summary.userId && Objects.equals(description, summary.description) && Objects.equals(displayName, summary.displayName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(summaryId, description, displayName, userId);
     }
 }

@@ -26,6 +26,17 @@ public class User {
     private List<Skill> skills = new ArrayList<>();
     private List<String> roles = new ArrayList<>();
 
+    public User() {
+    }
+
+    public User(int userId, String email, String password, String username, boolean disabled) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.disabled = disabled;
+    }
+
     public int getUserId() {
         return userId;
     }
@@ -132,5 +143,22 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(userId, email, password, username, disabled);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                ", disabled=" + disabled +
+                ", userInfo=" + userInfo +
+                ", summaries=" + summaries +
+                ", educations=" + educations +
+                ", experiences=" + experiences +
+                ", skills=" + skills +
+                ", roles=" + roles +
+                '}';
     }
 }
