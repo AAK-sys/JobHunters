@@ -13,14 +13,14 @@
 
 **Monday**
 
--   [ ] Add Spring DI to the project - **_Both (Expected Time: 0.5hr)_**
--   [ ] Create models - **_D1 (Expected Time: 0.5hr)_**
-    -   [ ] User
-    -   [ ] UserInfo
-    -   [ ] Education
-    -   [ ] Experience
-    -   [ ] Summary
-    -   [ ] Skill
+-   [x] Add Spring DI to the project - **_Both (Expected Time: 0.5hr)_**
+-   [x] Create models - **_D1 (Expected Time: 0.5hr)_**
+    -   [x] User
+    -   [x] UserInfo
+    -   [x] Education
+    -   [x] Experience
+    -   [x] Summary
+    -   [x] Skill
 -   [ ] Build repositories in data layer - **_D1 (Expected Time: 3hrs)_**
     -   [ ] Create Interfaces
     -   [ ] Create Jdbc Repositories
@@ -51,7 +51,7 @@
 -   [ ] Add Authentication With JWT - **_D2 (Expected Time: 1hr)_**
 -   [ ] Build Controllers - **_D2 (Expected Time: 2hrs)_**
     -   [ ] Build Controllers for model
-    -   [ ] Build Mappers
+    -   [x] Build Mappers
     -   [ ] Create http test files
 
 ### Front End (React)
