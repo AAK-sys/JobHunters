@@ -20,6 +20,7 @@ public class EducationMapper implements RowMapper<Education> {
             education.setEndDate(resultSet.getDate("end_date").toLocalDate());
         }
         education.setDescription(resultSet.getString("description"));
+        education.setUserId(resultSet.getInt("user_id"));
         return education;
     }
 }

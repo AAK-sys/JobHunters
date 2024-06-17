@@ -19,6 +19,7 @@ public class ExperienceMapper implements RowMapper<Experience> {
             experience.setEndDate(resultSet.getDate("end_date").toLocalDate());
         }
         experience.setDescription(resultSet.getString("description"));
+        experience.setUserId(resultSet.getInt("user_id"));
         return experience;
     }
 }

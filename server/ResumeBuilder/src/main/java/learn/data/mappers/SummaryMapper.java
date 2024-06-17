@@ -13,6 +13,7 @@ public class SummaryMapper implements RowMapper<Summary> {
         summary.setSummaryId(resultSet.getInt("summary_id"));
         summary.setDescription(resultSet.getString("description"));
         summary.setDisplayName(resultSet.getString("display_name"));
+        summary.setUserId(resultSet.getInt("user_id"));
         return summary;
     }
 }

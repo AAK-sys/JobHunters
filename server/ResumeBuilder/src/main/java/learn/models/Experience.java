@@ -21,10 +21,13 @@ public class Experience {
     private LocalDate endDate;
     private String description;
 
+    @NotNull(message = "Experience must be linked to a user.")
+    private int userId;
+
     public Experience() {
     }
 
-    public Experience(int experienceId, String companyName, String role, String displayName, LocalDate startDate, LocalDate endDate, String description) {
+    public Experience(int experienceId, String companyName, String role, String displayName, LocalDate startDate, LocalDate endDate, String description, int userId) {
         this.experienceId = experienceId;
         this.companyName = companyName;
         this.role = role;
@@ -32,6 +35,7 @@ public class Experience {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
+        this.userId = userId;
     }
 
     public int getExperienceId() {
@@ -88,5 +92,13 @@ public class Experience {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

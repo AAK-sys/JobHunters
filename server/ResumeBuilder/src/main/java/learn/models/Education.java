@@ -24,10 +24,13 @@ public class Education {
     private LocalDate endDate;
     private String description;
 
+    @NotNull(message = "Education must be linked to a user.")
+    private int userId;
+
     public Education() {
     }
 
-    public Education(int educationId, String universityName, String degree, String major, double gpa, LocalDate startDate, LocalDate endDate, String description) {
+    public Education(int educationId, String universityName, String degree, String major, double gpa, LocalDate startDate, LocalDate endDate, String description, int userId) {
         this.educationId = educationId;
         this.universityName = universityName;
         this.degree = degree;
@@ -36,6 +39,7 @@ public class Education {
         this.startDate = startDate;
         this.endDate = endDate;
         this.description = description;
+        this.userId = userId;
     }
 
     public int getEducationId() {
@@ -100,5 +104,13 @@ public class Education {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

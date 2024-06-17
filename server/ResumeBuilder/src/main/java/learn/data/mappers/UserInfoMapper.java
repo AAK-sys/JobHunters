@@ -16,6 +16,7 @@ public class UserInfoMapper implements RowMapper<UserInfo> {
         userInfo.setPhone(resultSet.getString("phone"));
         userInfo.setWebsite(resultSet.getString("website"));
         userInfo.setLocation(resultSet.getString("location"));
+        userInfo.setUserId(resultSet.getInt("user_id"));
         return userInfo;
     }
 }

@@ -24,6 +24,7 @@ public class User {
     private List<Education> educations = new ArrayList<>();
     private List<Experience> experiences = new ArrayList<>();
     private List<Skill> skills = new ArrayList<>();
+    private List<String> roles = new ArrayList<>();
 
     public int getUserId() {
         return userId;
@@ -63,6 +64,61 @@ public class User {
 
     public void setDisabled(boolean disabled) {
         this.disabled = disabled;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    public List<Summary> getSummaries() {
+        return summaries;
+    }
+
+    public void setSummaries(List<Summary> summaries) {
+        this.summaries = summaries;
+    }
+
+    public List<Education> getEducations() {
+        return educations;
+    }
+
+    public void setEducations(List<Education> educations) {
+        this.educations = educations;
+    }
+
+    public List<Experience> getExperiences() {
+        return experiences;
+    }
+
+    public void setExperiences(List<Experience> experiences) {
+        this.experiences = experiences;
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
+    }
+
+    public boolean hasRole(String role) {
+        if(roles == null) {
+            return false;
+        }
+        return roles.contains(role);
     }
 
     @Override
