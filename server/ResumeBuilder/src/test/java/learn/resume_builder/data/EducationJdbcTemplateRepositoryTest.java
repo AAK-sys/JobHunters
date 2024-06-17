@@ -1,8 +1,7 @@
 package learn.resume_builder.data;
 
 import learn.resume_builder.models.Education;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -11,6 +10,7 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class EducationJdbcTemplateRepositoryTest {
     @Autowired
     EducationJdbcTemplateRepository repository;
@@ -18,9 +18,14 @@ class EducationJdbcTemplateRepositoryTest {
     @Autowired
     KnownGoodState knownGoodState;
 
-    @BeforeEach
+    @BeforeAll
     void setup() {
         knownGoodState.set();
+    }
+
+    @AfterAll
+    void reset() {
+        knownGoodState.reset();
     }
 
     @Test
