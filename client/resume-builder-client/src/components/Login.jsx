@@ -1,17 +1,40 @@
-import { Link } from "react-router-dom";
-import '../App.css'
+import { Link } from "react-router-dom"
+import { useState } from 'react'
 function Login() {
+
+    const defaultLogin = {
+        email: "",
+        password: "",
+    }
+
+    const [user, setUser] = useState(defaultLogin);
+
+    const handleChange = (event) => {
+        const fieldName = event.target.id;
+        const fieldValue = event.target.value;
+      
+        setUser(() => ({
+          ...user,
+          [fieldName]: fieldValue,
+        }));
+    };
+
+    const handleSubmit = (event) => {
+        console.log("authentication starts here")
+    }
+
   return (
     <div id="loginForm">
-        <form>
+        <form onSubmit={handleSubmit}>
         <fieldset>
         <legend>Login</legend>
           <div className="form-group col-md-9">
+
               <label htmlFor="email">Email: </label>
-              <input type="text" className="form-control" id="email"/>
+              <input type="text" className="form-control" id="email" value={user.email} onChange={handleChange}/>
 
               <label htmlFor="password"> password: </label>
-              <input type="password" className="form-control" id="password"/>
+              <input type="password" className="form-control" id="password" value ={user.password} onChange={handleChange}/>
               
             <div>
                 <button id="loginSubmitBtn" type='submit'>login</button>
