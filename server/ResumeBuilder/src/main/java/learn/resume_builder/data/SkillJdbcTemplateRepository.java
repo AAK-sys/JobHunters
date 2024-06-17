@@ -1,7 +1,7 @@
-package learn.data;
+package learn.resume_builder.data;
 
-import learn.data.mappers.SkillMapper;
-import learn.models.Skill;
+import learn.resume_builder.data.mappers.SkillMapper;
+import learn.resume_builder.models.Skill;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;

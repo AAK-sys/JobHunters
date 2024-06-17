@@ -1,6 +1,6 @@
-package learn.data;
+package learn.resume_builder.data;
 
-import learn.models.Education;
+import learn.resume_builder.models.Education;
 
 public interface EducationRepository {
     Education findById(int educationId);

@@ -1,7 +1,7 @@
-package learn.data;
+package learn.resume_builder.data;
 
-import learn.data.mappers.SummaryMapper;
-import learn.models.Summary;
+import learn.resume_builder.data.mappers.SummaryMapper;
+import learn.resume_builder.models.Summary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;

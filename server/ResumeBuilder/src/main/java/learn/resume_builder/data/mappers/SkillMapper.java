@@ -1,6 +1,6 @@
-package learn.data.mappers;
+package learn.resume_builder.data.mappers;
 
-import learn.models.Skill;
+import learn.resume_builder.models.Skill;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

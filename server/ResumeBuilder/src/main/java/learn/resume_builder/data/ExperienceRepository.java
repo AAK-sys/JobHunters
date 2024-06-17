@@ -1,6 +1,6 @@
-package learn.data;
+package learn.resume_builder.data;
 
-import learn.models.Experience;
+import learn.resume_builder.models.Experience;
 
 public interface ExperienceRepository {
     Experience findById(int experienceId);

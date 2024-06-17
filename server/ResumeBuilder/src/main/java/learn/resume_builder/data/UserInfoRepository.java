@@ -1,6 +1,6 @@
-package learn.data;
+package learn.resume_builder.data;
 
-import learn.models.UserInfo;
+import learn.resume_builder.models.UserInfo;
 
 public interface UserInfoRepository {
     UserInfo findById(int userInfoId);

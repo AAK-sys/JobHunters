@@ -1,4 +1,4 @@
-package learn.models;
+package learn.resume_builder.models;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

@@ -1,6 +1,6 @@
-package learn.data;
+package learn.resume_builder.data;
 
-import learn.models.Summary;
+import learn.resume_builder.models.Summary;
 
 public interface SummaryRepository {
     Summary findById(int summaryId);

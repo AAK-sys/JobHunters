@@ -1,6 +1,6 @@
-package learn.data;
+package learn.resume_builder.data;
 
-import learn.models.Skill;
+import learn.resume_builder.models.Skill;
 
 import java.util.List;
 
