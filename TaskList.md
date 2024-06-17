@@ -13,23 +13,23 @@
 
 **Monday**
 
--   [ ] Add Spring DI to the project - **_Both (Expected Time: 0.5hr)_**
--   [ ] Create models - **_D1 (Expected Time: 0.5hr)_**
-    -   [ ] User
-    -   [ ] UserInfo
-    -   [ ] Education
-    -   [ ] Experience
-    -   [ ] Summary
-    -   [ ] Skill
--   [ ] Build repositories in data layer - **_D1 (Expected Time: 3hrs)_**
-    -   [ ] Create Interfaces
-    -   [ ] Create Jdbc Repositories
-        -   [ ] User
-        -   [ ] UserInfo
-        -   [ ] Education
-        -   [ ] Experience
-        -   [ ] Summary
-        -   [ ] Skill
+-   [x] Add Spring DI to the project - **_Both (Expected Time: 0.5hr, Actual Time: 0.25hr)_**
+-   [x] Create models - **_D1 (Expected Time: 0.5hr, Actual Time: 0.5hr)_**
+    -   [x] User
+    -   [x] UserInfo
+    -   [x] Education
+    -   [x] Experience
+    -   [x] Summary
+    -   [x] Skill
+-   [x] Build repositories in data layer - **_D1 (Expected Time: 3hrs, Actual Time: 2 hr 45min)_**
+    -   [x] Create Interfaces
+    -   [x] Create Jdbc Repositories
+        -   [x] User
+        -   [x] UserInfo
+        -   [x] Education
+        -   [x] Experience
+        -   [x] Summary
+        -   [x] Skill
 -   [ ] Create tests for repository - **_D1 (Expected Time: 1hr)_**
     -   [ ] Create tests for repositories using mockito
         -   [ ] User
@@ -51,7 +51,7 @@
 -   [ ] Add Authentication With JWT - **_D2 (Expected Time: 1hr)_**
 -   [ ] Build Controllers - **_D2 (Expected Time: 2hrs)_**
     -   [ ] Build Controllers for model
-    -   [ ] Build Mappers
+    -   [x] Build Mappers
     -   [ ] Create http test files
 
 ### Front End (React)
