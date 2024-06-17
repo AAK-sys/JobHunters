@@ -1,6 +1,5 @@
 package learn.resume_builder.data;
 
-import learn.data.mappers.*;
 import learn.resume_builder.models.User;
 import learn.resume_builder.data.mappers.*;
 import org.springframework.jdbc.core.JdbcTemplate;
