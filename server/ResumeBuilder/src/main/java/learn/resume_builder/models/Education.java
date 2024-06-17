@@ -4,6 +4,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Education {
     private int educationId;
@@ -112,5 +113,18 @@ public class Education {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Education education = (Education) o;
+        return educationId == education.educationId && Double.compare(gpa, education.gpa) == 0 && userId == education.userId && Objects.equals(universityName, education.universityName) && Objects.equals(degree, education.degree) && Objects.equals(major, education.major) && Objects.equals(startDate, education.startDate) && Objects.equals(endDate, education.endDate) && Objects.equals(description, education.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(educationId, universityName, degree, major, gpa, startDate, endDate, description, userId);
     }
 }

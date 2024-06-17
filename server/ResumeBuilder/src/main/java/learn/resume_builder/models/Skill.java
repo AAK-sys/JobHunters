@@ -1,6 +1,7 @@
 package learn.resume_builder.models;
 
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 public class Skill {
     private int skillId;
@@ -30,5 +31,18 @@ public class Skill {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Skill skill = (Skill) o;
+        return skillId == skill.skillId && Objects.equals(name, skill.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(skillId, name);
     }
 }
