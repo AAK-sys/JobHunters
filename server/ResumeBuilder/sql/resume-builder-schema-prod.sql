@@ -12,7 +12,7 @@ create table user(
     user_id int primary key auto_increment,
     email varchar(320) unique not null,
     password_hash varchar(2048) not null,
-    username varchar(50) not null,
+    username varchar(50) unique not null,
     disabled boolean not null default false
 );
 
