@@ -3,46 +3,48 @@ package learn.resume_builder.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable() //enable and configure it before deployment
-                .authorizeRequests()
-                //.antMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN") //for example
-                //.anyRequest().authenticated()
-                .anyRequest().permitAll() //for now
+    private final JwtConverter converter;
+
+    public SecurityConfig(JwtConverter converter) {
+        this.converter = converter;
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+
+        http.csrf().disable(); // 1
+
+        http.authorizeRequests() // 2
+                .antMatchers("/api/auth/**").permitAll()
                 .and()
-                .httpBasic(); //this needs to change and be configured to support https if we want to deploy(VERY IMPORTANT)
-        return http.build();
+                .addFilter(new JwtRequestFilter(authenticationManager(), converter)) // 3
+                .sessionManagement() // 4
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+
+    @Override
+    @Bean
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 
     @Bean
-    public UserDetailsService users() {
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password("password")
-                .roles("ADMIN")
-                .build();
-
-        UserDetails user = User.builder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(admin, user);
-
+    public PasswordEncoder getEncoder() {
+        return new BCryptPasswordEncoder();
     }
-
 }
+
+
+

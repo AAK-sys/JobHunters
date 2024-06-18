@@ -24,7 +24,17 @@ public class User {
     private List<Education> educations = new ArrayList<>();
     private List<Experience> experiences = new ArrayList<>();
     private List<Skill> skills = new ArrayList<>();
-    private List<String> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
+
+    public User() {
+
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = "example@email.com";
+    }
 
     public int getUserId() {
         return userId;
@@ -106,11 +116,11 @@ public class User {
         this.skills = skills;
     }
 
-    public List<String> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
