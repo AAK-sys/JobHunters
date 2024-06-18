@@ -1,6 +1,6 @@
 package learn.resume_builder.models;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,13 +8,14 @@ import java.util.Objects;
 public class User {
     private int userId;
 
-    @NotNull(message = "Email is required.")
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Email must be a valid email address.")
     private String email;
 
-    @NotNull(message = "Password is required.")
+    @NotBlank(message = "Password is required.")
     private String password;
 
-    @NotNull(message = "Username is required.")
+    @NotBlank(message = "Username is required.")
     private String username;
 
     private boolean disabled;

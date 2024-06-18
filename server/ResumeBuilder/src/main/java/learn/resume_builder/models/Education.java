@@ -1,8 +1,6 @@
 package learn.resume_builder.models;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -15,18 +13,29 @@ public class Education {
     private String degree;
     private String major;
 
-    @Min(value = 0, message = "GPA must be between 0.0 and 4.0.")
-    @Max(value = 4, message = "GPA must be between 0.0 and 4.0.")
+    @DecimalMin(value = "0.0", message = "GPA must be between 0.0 and 4.0.")
+    @DecimalMax(value = "4.0", message = "GPA must be between 0.0 and 4.0.")
     private double gpa;
 
     @NotNull(message = "Start date is required.")
+    @PastOrPresent(message = "Start date must be in the past or present.")
     private LocalDate startDate;
 
+    @PastOrPresent(message = "End date must be in the past or present.")
     private LocalDate endDate;
     private String description;
 
-    @NotNull(message = "Education must be linked to a user.")
+    @Min(value = 1, message = "Education must be linked to a user.")
     private int userId;
+
+    // Extra validation
+    @AssertTrue(message = "End date must be after start date.")
+    public boolean isValidDate() {
+        if(endDate == null) {
+            return true;
+        }
+        return endDate.isAfter(startDate);
+    }
 
     public Education() {
     }

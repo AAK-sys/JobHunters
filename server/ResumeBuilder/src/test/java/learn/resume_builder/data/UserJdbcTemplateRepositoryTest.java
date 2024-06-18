@@ -30,7 +30,7 @@ class UserJdbcTemplateRepositoryTest {
 
     @Test
     void findAllUsers() {
-        List<User> all = repository.findAllUsers();
+        List<User> all = repository.findAll();
         assertTrue(all.size() >= 3);
     }
 
