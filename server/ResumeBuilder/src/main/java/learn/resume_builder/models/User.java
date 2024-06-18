@@ -1,9 +1,14 @@
 package learn.resume_builder.models;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class User {
     private int userId;
@@ -30,10 +35,13 @@ public class User {
 
     }
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
-        this.email = "example@email.com";
+        this.email = "test@email.com";
+        this.roles = authorities.stream()
+                .map(auth -> new Role(auth.getAuthority()))
+                .collect(Collectors.toList());
     }
 
     public int getUserId() {
@@ -125,10 +133,16 @@ public class User {
     }
 
     public boolean hasRole(String role) {
-        if(roles == null) {
+        if (roles == null) {
             return false;
         }
-        return roles.contains(role);
+        return roles.stream().anyMatch(r -> r.getName().equals(role));
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override

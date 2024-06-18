@@ -1,11 +1,8 @@
 package learn.resume_builder.security;
 
-import learn.resume_builder.models.Role;
 import learn.resume_builder.models.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -14,9 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class JwtRequestFilter extends BasicAuthenticationFilter {
 
@@ -32,30 +26,25 @@ public class JwtRequestFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
 
-        // 2. Read the Authorization value from the request.
+
         String authorization = request.getHeader("Authorization");
         if (authorization != null && authorization.startsWith("Bearer ")) {
 
-            // 3. The value looks okay, confirm it with JwtConverter.
+
             User user = converter.getUserFromToken(authorization);
             if (user == null) {
-                response.setStatus(403); // Forbidden
+                response.setStatus(403);
             } else {
 
-                // 4. Confirmed. Set auth for this single request.
+
                 UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                        user.getUsername(), null, mapRolesToAuthorities(user.getRoles()));
+                        user.getUsername(), null, user.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(token);
             }
         }
 
-        // 5. Keep the chain going.
+
         chain.doFilter(request, response);
     }
-
-    private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles){
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-    }
-
 }

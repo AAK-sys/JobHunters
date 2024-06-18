@@ -1,8 +1,9 @@
 package learn.resume_builder.controllers;
 
-import learn.resume_builder.dto.SignupDto;
+import learn.resume_builder.data.UserJdbcTemplateRepository;
 import learn.resume_builder.models.User;
 import learn.resume_builder.security.JwtConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,35 +24,38 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtConverter converter;
+    private final UserJdbcTemplateRepository userRepo;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtConverter converter) {
+    @Autowired
+    public AuthController(AuthenticationManager authenticationManager, JwtConverter converter, UserJdbcTemplateRepository userRepo) {
         this.authenticationManager = authenticationManager;
         this.converter = converter;
+        this.userRepo = userRepo;
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<HashMap<String, String>> signup(@RequestBody HashMap<String, String> input){
-
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(input.get("username"), input.get("password"));
+    @PostMapping("/login")//change this to login
+    public ResponseEntity<HashMap<String, String>> authenticate(@RequestBody Map<String, String> credentials) {
+        //before last change
 
         try {
-            Authentication authentication = authenticationManager.authenticate(authToken);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(credentials.get("username"), credentials.get("password")));
 
             if (authentication.isAuthenticated()) {
-                String jwtToken = converter.getTokenFromUser((User) authentication.getPrincipal());
+
+                User user = userRepo.findByUsername(credentials.get("username"));
+
+                String jwtToken = converter.getTokenFromUser(user);
 
                 HashMap<String, String> map = new HashMap<>();
                 map.put("jwt_token", jwtToken);
 
                 return new ResponseEntity<>(map, HttpStatus.OK);
             }
-
-        } catch (AuthenticationException ex) {
-            System.out.println(ex);
+        } catch (Exception ex) {
+            System.out.println("Authentication failed: " + ex.getMessage());
         }
 
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
-
 }

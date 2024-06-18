@@ -103,3 +103,9 @@ insert into role (`name`)
     values
         ('USER'),
         ('ADMIN');
+insert into user (email, password_hash, username) values
+("test@gmail.com", "$2a$10$jEux/jBqfREzR9SDuWIKJuW8VgrL5Y2hJQe3fZ0f6zAVtoQJZdY7m", "test");
+    
+insert into user_role(user_id, role_id)
+values
+(1,1);

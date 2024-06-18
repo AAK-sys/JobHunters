@@ -2,11 +2,12 @@ package learn.resume_builder.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import learn.resume_builder.models.Role;
+import learn.resume_builder.data.UserJdbcTemplateRepository;
+import learn.resume_builder.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import learn.resume_builder.models.User; // Your User class
+
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Date;
@@ -16,20 +17,26 @@ import java.util.stream.Collectors;
 @Component
 public class JwtConverter {
 
-    // 1. Signing key
+    UserJdbcTemplateRepository userRepo;
+
+
     private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    // 2. "Configurable" constants
-    private final String ISSUER = "bug-safari";
-    private final int EXPIRATION_MINUTES = 15;
+
+    private final String ISSUER = "resumeBuilder";
+    private final int EXPIRATION_MINUTES = 300;
     private final int EXPIRATION_MILLIS = EXPIRATION_MINUTES * 60 * 1000;
+
+    public JwtConverter(UserJdbcTemplateRepository userRepo) {
+        this.userRepo = userRepo;
+    }
 
     public String getTokenFromUser(User user) {
 
-        String authorities = user.getRoles().stream()
-                .map(Role::getName)
+        String authorities = user.getAuthorities().stream()
+                .map(i -> i.getAuthority())
                 .collect(Collectors.joining(","));
 
-        // 3. Use JJWT classes to build a token.
+
         return Jwts.builder()
                 .setIssuer(ISSUER)
                 .setSubject(user.getUsername())
@@ -46,7 +53,7 @@ public class JwtConverter {
         }
 
         try {
-            // 4. Use JJWT classes to read a token.
+
             Jws<Claims> jws = Jwts.parserBuilder()
                     .requireIssuer(ISSUER)
                     .setSigningKey(key)
@@ -54,20 +61,16 @@ public class JwtConverter {
                     .parseClaimsJws(token.substring(7));
 
             String username = jws.getBody().getSubject();
-            String authStr = (String) jws.getBody().get("authorities");
-            List<GrantedAuthority> authorities = Arrays.stream(authStr.split(","))
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
 
-            // Return your User object with authorities
-            return new User(username, "password placeholder", "authorities");
+            return userRepo.findByUsername(username);
 
         } catch (JwtException e) {
-            // 5. JWT failures are modeled as exceptions.
+
             System.out.println(e);
         }
 
         return null;
     }
 }
+
 

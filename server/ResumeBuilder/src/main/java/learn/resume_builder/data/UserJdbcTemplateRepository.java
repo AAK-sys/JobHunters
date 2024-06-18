@@ -131,7 +131,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
     private void addUserInfo(User user) {
         final String sql = "select user_info_id, full_name, email, phone, website, `location`, user_id "
                 + "from user_info "
-                + "where agent_id = ?;";
+                + "where user_id = ?;";
         var userInfo = jdbcTemplate.query(sql, new UserInfoMapper(), user.getUserId()).stream().findFirst().orElse(null);
         user.setUserInfo(userInfo);
     }
@@ -163,9 +163,9 @@ public class UserJdbcTemplateRepository implements UserRepository {
     private void addSkills(User user) {
         final String sql = "select s.skill_id, s.`name` "
                 + "from skill s "
-                + "inner join user_skill us on us.skill_d = s.skill_id "
+                + "inner join user_skill us on us.skill_id = s.skill_id "
                 + "inner join user u on u.user_id = us.user_id "
-                + "where user_id = ?;";
+                + "where u.user_id = ?;";
 
         var skills = jdbcTemplate.query(sql, new SkillMapper(), user.getUserId());
         user.setSkills(skills);
@@ -178,14 +178,15 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
         final String sql = "select r.role_id, r.`name`"
                 + "from role r "
-                + "where r.`name` = ?;";
+                + "inner join user_role ur on ur.role_id = r.role_id "
+                + "where ur.user_id = ?;";
 
                 /*
                 + "inner join user_role ur on ur.role_id = r.skill_id "
                 + "inner join user u on u.user_id = ur.user_id "
                 + "where user_id = ?;";*/
 
-        var roles = jdbcTemplate.query(sql, new RoleMapper(), "USER");
+        var roles = jdbcTemplate.query(sql, new RoleMapper(), user.getUserId());
         user.setRoles(roles);
 
     }

@@ -1,4 +1,4 @@
-/*package learn.resume_builder.security;
+package learn.resume_builder.security;
 
 import learn.resume_builder.data.UserJdbcTemplateRepository;
 import learn.resume_builder.data.UserRepository;
@@ -29,10 +29,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         learn.resume_builder.models.User user = userRepository.findByUsername(s);
-        return new User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + s);
+        }
+        Collection<GrantedAuthority> authorities = mapRolesToAuthorities(user.getRoles());
+
+        return new User(user.getUsername(), user.getPassword(), authorities);
     }
 
     private Collection<GrantedAuthority> mapRolesToAuthorities(List<Role> roles){
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
     }
-}*/
+}
