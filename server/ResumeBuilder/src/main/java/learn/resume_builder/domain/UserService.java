@@ -27,6 +27,10 @@ public class UserService {
         return repository.findById(userId);
     }
 
+    public User findByUsername(String name) {
+        return repository.findByUsername(name);
+    }
+
     public Result<User> add(User user) {
         Result<User> result = new Result<>();
         if(user == null) {

@@ -188,6 +188,5 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
         var roles = jdbcTemplate.query(sql, new RoleMapper(), user.getUserId());
         user.setRoles(roles);
-
     }
 }
