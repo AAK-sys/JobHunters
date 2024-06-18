@@ -29,7 +29,7 @@ public class ExperienceJdbcTemplateRepository implements  ExperienceRepository {
 
     @Override
     public Experience add(Experience experience) {
-        final String sql = "insert into education (company_name, `role`, display_name, `start_date`, `end_date`, `description`, user_id) "
+        final String sql = "insert into experience (company_name, `role`, display_name, `start_date`, `end_date`, `description`, user_id) "
                 + "values (?,?,?,?,?,?,?);";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -61,7 +61,7 @@ public class ExperienceJdbcTemplateRepository implements  ExperienceRepository {
                 + "display_name = ?, "
                 + "`start_date` = ?, "
                 + "`end_date` = ?, "
-                + "`description = ? "
+                + "`description` = ? "
                 + "where experience_id = ?;";
         return jdbcTemplate.update(sql,
                 experience.getCompanyName(),
@@ -70,7 +70,7 @@ public class ExperienceJdbcTemplateRepository implements  ExperienceRepository {
                 experience.getStartDate(),
                 experience.getEndDate(),
                 experience.getDescription(),
-                experience.getUserId()) > 0;
+                experience.getExperienceId()) > 0;
     }
 
     @Override

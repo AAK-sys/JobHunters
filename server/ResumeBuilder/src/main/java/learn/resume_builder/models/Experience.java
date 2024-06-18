@@ -2,6 +2,7 @@ package learn.resume_builder.models;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Experience {
     private int experienceId;
@@ -100,5 +101,18 @@ public class Experience {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Experience that = (Experience) o;
+        return experienceId == that.experienceId && userId == that.userId && Objects.equals(companyName, that.companyName) && Objects.equals(role, that.role) && Objects.equals(displayName, that.displayName) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(experienceId, companyName, role, displayName, startDate, endDate, description, userId);
     }
 }

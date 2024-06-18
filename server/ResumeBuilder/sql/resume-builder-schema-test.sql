@@ -48,7 +48,7 @@ create table summary(
     display_name varchar(50) not null,
     user_id int not null,
     constraint summary_user_id
-        foreign key (summary_id)
+        foreign key (user_id)
         references user (user_id)
 );
 

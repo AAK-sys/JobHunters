@@ -101,13 +101,13 @@ public class UserJdbcTemplateRepository implements UserRepository {
     }
 
     @Override
-    public void update(User user) {
+    public boolean update(User user) {
         final String sql = "update user set "
                 + "email = ?, "
                 + "username = ?, "
                 + "disabled = ? "
                 + "where user_id = ?;";
-        jdbcTemplate.update(sql, user.getEmail(), user.getUsername(), user.isDisabled(), user.getUserId());
+        return jdbcTemplate.update(sql, user.getEmail(), user.getUsername(), user.isDisabled(), user.getUserId()) > 0;
         // To implement if needed: updateRoles
     }
 
