@@ -1,9 +1,15 @@
 package learn.resume_builder.models;
 
 import javax.validation.constraints.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class User {
     private int userId;
@@ -12,9 +18,11 @@ public class User {
     @Email(message = "Email must be a valid email address.")
     private String email;
 
+    @NotNull(message = "Password is required.")
     @NotBlank(message = "Password is required.")
     private String password;
 
+    @NotNull(message = "Username is required.")
     @NotBlank(message = "Username is required.")
     private String username;
 
@@ -25,7 +33,16 @@ public class User {
     private List<Education> educations = new ArrayList<>();
     private List<Experience> experiences = new ArrayList<>();
     private List<Skill> skills = new ArrayList<>();
-    private List<String> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
+
+    public User(String username, String password, String email, Collection<? extends GrantedAuthority> authorities) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.roles = authorities.stream()
+                .map(auth -> new Role(auth.getAuthority()))
+                .collect(Collectors.toList());
+    }
 
     public User() {
     }
@@ -118,19 +135,25 @@ public class User {
         this.skills = skills;
     }
 
-    public List<String> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 
     public boolean hasRole(String role) {
-        if(roles == null) {
+        if (roles == null) {
             return false;
         }
-        return roles.contains(role);
+        return roles.stream().anyMatch(r -> r.getName().equals(role));
+    }
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override

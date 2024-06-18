@@ -49,9 +49,34 @@ public class UserJdbcTemplateRepository implements UserRepository {
         addExperiences(user);
         addSkills(user);
         // To implement if needed: user.setRoles(getRolesByUserId(userId))
-
+        addRoles(user);
         return user;
     }
+
+    @Override
+    public User findByUsername(String s) {
+        final String sql = "select user_id, email, password_hash, username, disabled "
+                + "from user "
+                + "where username = ?;";
+
+        User user = jdbcTemplate.query(sql, new UserMapper(), s).stream().findFirst().orElse(null);
+
+        // If user doesn't exist return null
+        if(user == null) {
+            return null;
+        }
+
+        // Populate user with their existing info
+        addUserInfo(user);
+        addSummaries(user);
+        addEducations(user);
+        addExperiences(user);
+        addSkills(user);
+        // To implement if needed: user.setRoles(getRolesByUserId(userId))
+        addRoles(user);
+        return user;
+    }
+
 
     @Override
     public User add(User user) {
@@ -144,5 +169,25 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
         var skills = jdbcTemplate.query(sql, new SkillMapper(), user.getUserId());
         user.setSkills(skills);
+    }
+
+    private void addRoles(User user) {
+
+        //No need to give users Admin through the API we can set it in the database directly
+        //this can be changed later
+
+        final String sql = "select r.role_id, r.`name`"
+                + "from role r "
+                + "inner join user_role ur on ur.role_id = r.role_id "
+                + "where ur.user_id = ?;";
+
+                /*
+                + "inner join user_role ur on ur.role_id = r.skill_id "
+                + "inner join user u on u.user_id = ur.user_id "
+                + "where user_id = ?;";*/
+
+        var roles = jdbcTemplate.query(sql, new RoleMapper(), user.getUserId());
+        user.setRoles(roles);
+
     }
 }
