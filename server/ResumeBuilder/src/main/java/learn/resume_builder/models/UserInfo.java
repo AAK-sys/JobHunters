@@ -1,22 +1,23 @@
 package learn.resume_builder.models;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Objects;
 
 public class UserInfo {
     private int userInfoId;
 
-    @NotNull(message = "Full Name is required.")
+    @NotBlank(message = "Full Name is required.")
     private String fullName;
 
-    @NotNull(message = "Email is required.")
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Email must be a valid email address.")
     private String email;
 
     private String phone;
     private String website;
     private String location;
 
-    @NotNull(message = "User Info must be linked to a user.")
+    @Min(value = 1, message = "User Info must be linked to a user.")
     private int userId;
 
     public UserInfo() {

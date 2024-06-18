@@ -1,12 +1,12 @@
 package learn.resume_builder.models;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Objects;
 
 public class Skill {
     private int skillId;
 
-    @NotNull(message = "Skill name is required.")
+    @NotBlank(message = "Skill name is required.")
     private String name;
 
     public Skill() {

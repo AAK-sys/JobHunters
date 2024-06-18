@@ -5,7 +5,7 @@ import learn.resume_builder.models.User;
 import java.util.List;
 
 public interface UserRepository {
-    List<User> findAllUsers();
+    List<User> findAll();
 
     User findById(int userId);
 
