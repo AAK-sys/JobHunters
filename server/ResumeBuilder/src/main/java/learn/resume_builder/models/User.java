@@ -35,10 +35,10 @@ public class User {
 
     }
 
-    public User(String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public User(String username, String password, String email, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
-        this.email = "test@email.com";
+        this.email = email;
         this.roles = authorities.stream()
                 .map(auth -> new Role(auth.getAuthority()))
                 .collect(Collectors.toList());
