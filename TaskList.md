@@ -13,8 +13,8 @@
 
 **Monday**
 
--   [x] Add Spring DI to the project - **_Both (Expected Time: 0.5hr, Actual Time: 0.25hr)_**
--   [x] Create models - **_D1 (Expected Time: 0.5hr, Actual Time: 0.5hr)_**
+-   [x] Add Spring DI to the project - **_Both (Expected Time: 30 min, Actual Time: 30 min)_**
+-   [x] Create models - **_D1 (Expected Time: 30 min, Actual Time: 30 min)_**
     -   [x] User
     -   [x] UserInfo
     -   [x] Education
@@ -23,6 +23,7 @@
     -   [x] Skill
 -   [x] Build repositories in data layer - **_D1 (Expected Time: 3hrs, Actual Time: 2 hr 45min)_**
     -   [x] Create Interfaces
+    -   [x] Build Mappers
     -   [x] Create Jdbc Repositories
         -   [x] User
         -   [x] UserInfo
@@ -30,28 +31,27 @@
         -   [x] Experience
         -   [x] Summary
         -   [x] Skill
--   [ ] Create tests for repository - **_D1 (Expected Time: 1hr)_**
-    -   [ ] Create tests for repositories using mockito
-        -   [ ] User
-        -   [ ] UserInfo
-        -   [ ] Education
-        -   [ ] Experience
-        -   [ ] Summary
-        -   [ ] Skill
--   [ ] Implement validators in models - **_D1 (Expected Time: 1hr)_**
--   [ ] Build services in domain layer - **_D1 (Expected Time: 3hrs)_**
+-   [x] Create tests for repository - **_D1 (Expected Time: 1hr, Actual Time: 2 hrs)_**
+    -   [x] Create tests for repositories using mockito
+        -   [x] User
+        -   [x] UserInfo
+        -   [x] Education
+        -   [x] Experience
+        -   [x] Summary
+        -   [x] Skill
+-   [x] Implement validators in models - **_D1 (Expected Time: 1hr, Actual Time: 30min)_**
+-   [x] Build services in domain layer - **_D1 (Expected Time: 3hrs, Actual Time: 3hrs)_**
+
+-   [x] Create tests for service - **_D1 (Expected Time: 2hrs, Actual Time: 2hrs)_**
+    -   [x] Test Validations
+    -   [x] Test Invalidations
+-   [x] Add test data to test database - **_D1 (Expected Time: 0.5hr, Actual Time: 1hr)_**
 
 **Tuesday**
-
--   [ ] Create tests for service - **_D1 (Expected Time: 2hrs)_**
-    -   [ ] Test Validations
-    -   [ ] Test Invalidations
--   [ ] Add test data to test database - **_D1 (Expected Time: 0.5hr)_**
 
 -   [ ] Add Authentication With JWT - **_D2 (Expected Time: 1hr)_**
 -   [ ] Build Controllers - **_D2 (Expected Time: 2hrs)_**
     -   [ ] Build Controllers for model
-    -   [x] Build Mappers
     -   [ ] Create http test files
 
 ### Front End (React)

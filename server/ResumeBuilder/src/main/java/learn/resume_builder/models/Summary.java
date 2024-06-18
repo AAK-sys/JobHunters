@@ -1,18 +1,18 @@
 package learn.resume_builder.models;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Objects;
 
 public class Summary {
     private int summaryId;
 
-    @NotNull(message = "Summary is required.")
+    @NotBlank(message = "Description is required.")
     private String description;
 
-    @NotNull(message = "Display Name is required.")
+    @NotBlank(message = "Display Name is required.")
     private String displayName;
 
-    @NotNull(message = "Summary must be linked to a user.")
+    @Min(value = 1, message = "Summary must be linked to a user.")
     private int userId;
 
     public Summary() {

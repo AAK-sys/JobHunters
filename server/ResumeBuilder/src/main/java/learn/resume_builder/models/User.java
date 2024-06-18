@@ -1,5 +1,6 @@
 package learn.resume_builder.models;
 
+import javax.validation.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -13,13 +14,16 @@ import java.util.stream.Collectors;
 public class User {
     private int userId;
 
-    @NotNull(message = "Email is required.")
+    @NotBlank(message = "Email is required.")
+    @Email(message = "Email must be a valid email address.")
     private String email;
 
     @NotNull(message = "Password is required.")
+    @NotBlank(message = "Password is required.")
     private String password;
 
     @NotNull(message = "Username is required.")
+    @NotBlank(message = "Username is required.")
     private String username;
 
     private boolean disabled;
@@ -30,10 +34,6 @@ public class User {
     private List<Experience> experiences = new ArrayList<>();
     private List<Skill> skills = new ArrayList<>();
     private List<Role> roles = new ArrayList<>();
-
-    public User() {
-
-    }
 
     public User(String username, String password, String email, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;

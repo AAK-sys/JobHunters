@@ -1,29 +1,41 @@
 package learn.resume_builder.models;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Experience {
     private int experienceId;
 
-    @NotNull(message = "Company name is required.")
+    @NotBlank(message = "Company name is required.")
     private String companyName;
 
-    @NotNull(message = "Role is required.")
+    @NotBlank(message = "Role is required.")
     private String role;
 
-    @NotNull(message = "Display name is required.")
+    @NotBlank(message = "Display name is required.")
     private String displayName;
 
     @NotNull(message = "Start date is required.")
+    @PastOrPresent(message = "Start date must be in the past or present.")
     private LocalDate startDate;
 
+    @PastOrPresent(message = "End date must be in the past or present.")
     private LocalDate endDate;
+
     private String description;
 
-    @NotNull(message = "Experience must be linked to a user.")
+    @Min(value = 1, message = "Experience must be linked to a user.")
     private int userId;
+
+    // Extra validation
+    @AssertTrue(message = "End date must be after start date.")
+    public boolean isValidDate() {
+        if(endDate == null) {
+            return true;
+        }
+        return endDate.isAfter(startDate);
+    }
 
     public Experience() {
     }

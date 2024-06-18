@@ -21,7 +21,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
     }
 
     @Override
-    public List<User> findAllUsers() {
+    public List<User> findAll() {
         final String sql = "select user_id, email, password_hash, username, disabled "
                 + "from user limit 1000;";
 
