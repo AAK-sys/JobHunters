@@ -47,11 +47,9 @@ public class JwtConverter {
     }
 
     public User getUserFromToken(String token) {
-
         if (token == null || !token.startsWith("Bearer ")) {
             return null;
         }
-
         try {
 
             Jws<Claims> jws = Jwts.parserBuilder()

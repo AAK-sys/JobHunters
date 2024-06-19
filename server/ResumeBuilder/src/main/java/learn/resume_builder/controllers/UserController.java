@@ -7,7 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
+@CrossOrigin
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -15,6 +18,11 @@ public class UserController {
 
     public UserController(UserService service) {
         this.service = service;
+    }
+
+    @GetMapping()
+    public List<User> getUsers() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")

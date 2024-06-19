@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/skill")
 public class SkillController {
@@ -16,6 +18,11 @@ public class SkillController {
 
     public SkillController (SkillService service) {
         this.service = service;
+    }
+
+    @GetMapping()
+    public List<Skill> getAll() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")

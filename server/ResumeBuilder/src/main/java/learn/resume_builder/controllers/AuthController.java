@@ -18,7 +18,6 @@ import java.util.HashMap;
 @CrossOrigin
 @RequestMapping("/api/auth")
 public class AuthController {
-
     private final AuthenticationManager authenticationManager;
     private final JwtConverter converter;
     private final UserService service;
@@ -58,7 +57,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> register (@RequestBody User credentials){
-
         Result<User> result = service.add(credentials);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
