@@ -2,16 +2,20 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 
+const AUTH_URL = "http://localhost:8080/api/auth";
+
 function SignUp() {
     const defaultSignUp = {
         email: "",
-        userName: "",
+        username: "",
         password: "",
         confirmPassword: "",
     };
 
     const navigate = useNavigate();
     const [user, setUser] = useState(defaultSignUp);
+    const [errors, setErrors] = useState([]);
+    const [success, setSuccess] = useState("");
 
     const handelChange = (event) => {
         const fieldName = event.target.id;
@@ -25,9 +29,44 @@ function SignUp() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("user signs up and get sent to login");
-        alert("you are signed up");
-        navigate("/");
+        if (user.password !== user.confirmPassword) {
+            setErrors(["Password and confirm password do not match."]);
+            return;
+        }
+        const userObj = {
+            userId: 0,
+            username: user.username,
+            password: user.password,
+            email: user.email,
+        };
+        const options = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(userObj),
+        };
+        fetch(`${AUTH_URL}/signup`, options)
+            .then((res) => {
+                if (res.status === 201 || res.status === 400) {
+                    return res.json();
+                } else {
+                    return Promise.reject(
+                        `Unexpected status code: ${res.status}`
+                    );
+                }
+            })
+            .then((data) => {
+                if (data.userId) {
+                    setErrors([]);
+                    setSuccess("Your account has been created.");
+                    setTimeout(() => {
+                        navigate("/login");
+                    }, 3000);
+                } else {
+                    setErrors(data);
+                }
+            });
     };
 
     return (
@@ -46,19 +85,17 @@ function SignUp() {
                             id="email"
                             value={user.email}
                             onChange={handelChange}
-                            required
                         />
                     </fieldset>
 
                     <fieldset className="mb-4 flex flex-col">
-                        <label htmlFor="userName">Username</label>
+                        <label htmlFor="username">Username</label>
                         <input
                             type="text"
                             className="border rounded-lg px-2 py-1 shadow-md"
-                            id="userName"
-                            value={user.userName}
+                            id="username"
+                            value={user.username}
                             onChange={handelChange}
-                            required
                         />
                     </fieldset>
 
@@ -66,30 +103,56 @@ function SignUp() {
                         <label htmlFor="password"> Password </label>
                         <input
                             type="password"
+                            autoComplete="on"
                             className="border rounded-lg px-2 py-1 shadow-md"
                             id="password"
                             value={user.password}
                             onChange={handelChange}
-                            required
                         />
                     </fieldset>
 
-                    <fieldset className="mb-2 flex flex-col">
+                    <fieldset className="mb-4 flex flex-col">
                         <label htmlFor="confirmPassword">
                             Confirm Password
                         </label>
                         <input
                             type="password"
+                            autoComplete="off"
                             className="border rounded-lg px-2 py-1 shadow-md"
                             id="confirmPassword"
                             value={user.confirmPassword}
                             onChange={handelChange}
-                            required
                         />
                     </fieldset>
+                    {success && (
+                        <div className="mb-4 bg-blue-200 p-4 rounded-lg">
+                            <p className="font-bold w-max">{success}</p>
+                            <p className="font-bold w-max">
+                                Redirecting to login...
+                            </p>
+                        </div>
+                    )}
+                    {errors.length > 0 && (
+                        <div className="mb-4 bg-red-200 p-4 rounded-lg">
+                            <p className="font-bold border-b-2 border-gray-400 w-max">
+                                The Following Errors Were Found
+                            </p>
+                            <ul>
+                                {errors.length > 0 &&
+                                    errors.map((error) => (
+                                        <li
+                                            key={error}
+                                            className="list-disc ml-4 mt-2"
+                                        >
+                                            {error}
+                                        </li>
+                                    ))}
+                            </ul>
+                        </div>
+                    )}
 
                     <button
-                        className="my-4 border-2 rounded-lg p-1 w-full"
+                        className="mb-4 border-2 rounded-lg p-1 w-full"
                         type="submit"
                     >
                         Sign up!

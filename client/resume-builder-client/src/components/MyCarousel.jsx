@@ -6,8 +6,8 @@ function MyCarousel() {
     const responsive = {
         desktop: {
             breakpoint: { max: 3000, min: 1024 },
-            items: 3,
-            slidesToSlide: 3, // optional, default to 1.
+            items: 2,
+            slidesToSlide: 2, // optional, default to 1.
         },
         tablet: {
             breakpoint: { max: 1024, min: 464 },
@@ -21,7 +21,7 @@ function MyCarousel() {
         },
     };
 
-    const text = ["test 1", "test 2", "test 3", "test 4", "test 5"];
+    const text = ["Default Template", "Coming Soon"];
     return (
         <Carousel
             responsive={responsive}
@@ -34,10 +34,11 @@ function MyCarousel() {
             transitionDuration={500}
             partialVisbiles={true}
             dotListClass="custom-dot-list-styles"
+            className="flex justify-between"
         >
             {text.map((message, i) => {
                 return (
-                    <div className="mx-20 p-8 overflow-hidden" key={i}>
+                    <div className="p-8 overflow-hidden" key={i}>
                         {message}
                     </div>
                 );

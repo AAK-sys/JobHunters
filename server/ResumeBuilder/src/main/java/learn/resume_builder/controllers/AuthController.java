@@ -57,7 +57,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> register (@RequestBody User credentials){
-
+        System.out.println(credentials);
         Result<User> result = service.add(credentials);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);

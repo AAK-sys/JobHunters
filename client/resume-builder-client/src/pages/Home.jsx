@@ -18,12 +18,15 @@ function Home() {
         <Layout>
             <div className="w-5/6 p-24 max-w-5xl mx-auto bg-red-50">
                 <h2 className="text-center text-3xl mb-24">
-                    Create Your Own Resume Now!
+                    Welcome back <span className="italic">{user.username}</span>
+                    !
                 </h2>
-
+                <h3 className="text-center text-2xl mb-12">
+                    Create Your Own Resume Now!
+                </h3>
                 {/* Carousel */}
                 <div>
-                    <h2>Choose a resume template</h2>
+                    <h2 className="ml-10">Choose a resume template</h2>
                     <MyCarousel />
                 </div>
             </div>

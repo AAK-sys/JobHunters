@@ -20,6 +20,7 @@ public class User {
 
     @NotNull(message = "Password is required.")
     @NotBlank(message = "Password is required.")
+    @Size(min = 8, message = "Password requires at least 8 characters")
     private String password;
 
     @NotNull(message = "Username is required.")
@@ -45,6 +46,13 @@ public class User {
     }
 
     public User() {
+    }
+
+    public User(int userId, String email, String password, String username) {
+        this.userId = userId;
+        this.email = email;
+        this.password = password;
+        this.username = username;
     }
 
     public User(int userId, String email, String password, String username, boolean disabled) {
