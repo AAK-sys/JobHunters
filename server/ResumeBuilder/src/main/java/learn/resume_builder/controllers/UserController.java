@@ -20,11 +20,6 @@ public class UserController {
         this.service = service;
     }
 
-    @GetMapping()
-    public List<User> getUsers() {
-        return service.findAll();
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUserById(@PathVariable int id){
         User user = service.findById(id);
@@ -63,9 +58,4 @@ public class UserController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-
-
-
-
-
 }
