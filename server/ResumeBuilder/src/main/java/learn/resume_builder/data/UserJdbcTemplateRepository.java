@@ -1,5 +1,6 @@
 package learn.resume_builder.data;
 
+import learn.resume_builder.models.Role;
 import learn.resume_builder.models.User;
 import learn.resume_builder.data.mappers.*;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -47,7 +48,6 @@ public class UserJdbcTemplateRepository implements UserRepository {
         addSummaries(user);
         addEducations(user);
         addExperiences(user);
-        addSkills(user);
         // To implement if needed: user.setRoles(getRolesByUserId(userId))
         addRoles(user);
         return user;
@@ -71,7 +71,6 @@ public class UserJdbcTemplateRepository implements UserRepository {
         addSummaries(user);
         addEducations(user);
         addExperiences(user);
-        addSkills(user);
         // To implement if needed: user.setRoles(getRolesByUserId(userId))
         addRoles(user);
         return user;
@@ -97,6 +96,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
         user.setUserId(keyHolder.getKey().intValue());
         // To implement if needed: updateRoles
+        addUserAsUser(user);
         return user;
     }
 
@@ -160,16 +160,13 @@ public class UserJdbcTemplateRepository implements UserRepository {
         user.setExperiences(experiences);
     }
 
-    private void addSkills(User user) {
-        final String sql = "select s.skill_id, s.`name` "
-                + "from skill s "
-                + "inner join user_skill us on us.skill_id = s.skill_id "
-                + "inner join user u on u.user_id = us.user_id "
-                + "where u.user_id = ?;";
+    private void addUserAsUser(User user) {
+        user.getRoles().add(new Role()); // adding the default user Role
 
-        var skills = jdbcTemplate.query(sql, new SkillMapper(), user.getUserId());
-        user.setSkills(skills);
+        final String sql = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
+        int userRole = jdbcTemplate.update(sql, user.getUserId(), 1);
     }
+
 
     private void addRoles(User user) {
 
