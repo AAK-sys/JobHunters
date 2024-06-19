@@ -19,3 +19,19 @@ h3,
 h4 {
     letter-spacing: 1.5px;
 }
+
+.nav-item {
+    padding: 1%;
+    border-radius: 0.5rem;
+    transition: 300ms;
+}
+
+.nav-item:hover {
+    background-color: rgba(226, 232, 240, 0.8);
+}
+
+.builder-dropdown {
+    border: 2px solid red;
+    width: 80%;
+    margin: auto;
+}

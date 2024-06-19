@@ -16,7 +16,7 @@ function Home() {
 
     return (
         <Layout>
-            <div className="w-5/6 p-24 max-w-5xl mx-auto">
+            <div className="w-5/6 p-24 max-w-5xl mx-auto bg-red-50">
                 <h2 className="text-center text-3xl mb-24">
                     Welcome back <span className="italic">{user.username}</span>
                     !
