@@ -1,49 +1,50 @@
 package learn.resume_builder.controllers;
 
+
 import learn.resume_builder.domain.Result;
-import learn.resume_builder.domain.UserService;
-import learn.resume_builder.models.User;
+import learn.resume_builder.domain.SkillService;
+import learn.resume_builder.models.Skill;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
-@RequestMapping("/api/user")
-public class UserController {
+@RequestMapping("/api/skill")
+public class SkillController {
 
-    UserService service;
+    SkillService service;
 
-    public UserController(UserService service) {
+    public SkillController (SkillService service) {
         this.service = service;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable int id){
-        User user = service.findById(id);
-        if (user == null) {
+    public ResponseEntity<Object> getSkillById(@PathVariable int id){
+        Skill Skill = service.findById(id);
+        if (Skill == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(Skill);
     }
 
-    @GetMapping
-    public ResponseEntity<Object> getUserByUsername(@RequestParam(required = true) String name){
-        User user = service.findByUsername(name);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(user);
-    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody User user){
-        if(id != user.getUserId()){
+    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Skill Skill){
+        if(id!= Skill.getSkillId()){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        Result<User> result = service.update(user);
+        Result<Skill> result = service.update(Skill);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.NO_CONTENT);
+        }
+        return ErrorResponse.build(result);
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> create(@RequestBody Skill Skill){
+        Result<Skill> result = service.add(Skill);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
         return ErrorResponse.build(result);
     }
@@ -56,9 +57,5 @@ public class UserController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-
-
-
-
-
+    
 }

@@ -1,49 +1,49 @@
 package learn.resume_builder.controllers;
 
 import learn.resume_builder.domain.Result;
-import learn.resume_builder.domain.UserService;
-import learn.resume_builder.models.User;
+import learn.resume_builder.domain.SummaryService;
+import learn.resume_builder.models.Summary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
-@RequestMapping("/api/user")
-public class UserController {
+@RequestMapping("/api/summary")
+public class SummaryController {
 
-    UserService service;
+    SummaryService service;
 
-    public UserController(UserService service) {
+    public SummaryController (SummaryService service) {
         this.service = service;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable int id){
-        User user = service.findById(id);
-        if (user == null) {
+    public ResponseEntity<Object> getSummaryById(@PathVariable int id){
+        Summary summary = service.findById(id);
+        if (summary == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(summary);
     }
 
-    @GetMapping
-    public ResponseEntity<Object> getUserByUsername(@RequestParam(required = true) String name){
-        User user = service.findByUsername(name);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return ResponseEntity.ok(user);
-    }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody User user){
-        if(id != user.getUserId()){
+    public ResponseEntity<Object> update(@PathVariable int id, @RequestBody Summary summary){
+        if(id!= summary.getSummaryId()){
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        Result<User> result = service.update(user);
+        Result<Summary> result = service.update(summary);
         if (result.isSuccess()) {
             return new ResponseEntity<>(result.getPayload(), HttpStatus.NO_CONTENT);
+        }
+        return ErrorResponse.build(result);
+    }
+
+    @PostMapping
+    public ResponseEntity<Object> create(@RequestBody Summary summary){
+        Result<Summary> result = service.add(summary);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
         }
         return ErrorResponse.build(result);
     }
@@ -56,9 +56,4 @@ public class UserController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-
-
-
-
-
 }
