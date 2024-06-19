@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useContext } from 'react';
+import { MyContext } from '../context/MyContext';
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "./Layout";
+
 
 function SignUp() {
     const defaultSignUp = {
@@ -11,7 +13,9 @@ function SignUp() {
     };
 
     const navigate = useNavigate();
-    const [user, setUser] = useState(defaultSignUp);
+    
+    const { user, setUser} = useContext(MyContext);
+    setUser(defaultSignUp);
 
     const handelChange = (event) => {
         const fieldName = event.target.id;

@@ -1,7 +1,10 @@
+import { useContext } from 'react';
+import { MyContext } from '../context/MyContext';
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../api/auth";
 import Layout from "./Layout";
+
 
 const URL = "http://localhost:8080/api/auth";
 
@@ -11,7 +14,10 @@ const defaultLogin = {
 };
 
 function Login() {
-    const [user, setUser] = useState(defaultLogin);
+
+    const { user, setUser} = useContext(MyContext);
+    setUser(defaultLogin);
+
     const [errors, setErrors] = useState([]);
     const navigate = useNavigate();
 
