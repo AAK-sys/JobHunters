@@ -16,7 +16,7 @@ function Home() {
 
     return (
         <Layout>
-            <div className="w-5/6 p-24 max-w-5xl mx-auto bg-red-50">
+            <div className="w-5/6 p-24 max-w-5xl mx-auto">
                 <h2 className="text-center text-3xl mb-24">
                     Welcome back <span className="italic">{user.username}</span>
                     !
@@ -26,7 +26,9 @@ function Home() {
                 </h3>
                 {/* Carousel */}
                 <div>
-                    <h2 className="ml-10">Choose a resume template</h2>
+                    <h2 className="ml-10">
+                        Choose a resume template to get started.
+                    </h2>
                     <MyCarousel />
                 </div>
             </div>

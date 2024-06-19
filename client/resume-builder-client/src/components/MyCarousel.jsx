@@ -1,5 +1,6 @@
 import React from "react";
 import Carousel from "react-multi-carousel";
+import CarouselItem from "./CarouselItem";
 import "react-multi-carousel/lib/styles.css";
 
 function MyCarousel() {
@@ -21,7 +22,7 @@ function MyCarousel() {
         },
     };
 
-    const text = ["Default Template", "Coming Soon"];
+    const resumeTemplates = ["Default Template", "Coming Soon"];
     return (
         <Carousel
             responsive={responsive}
@@ -33,15 +34,10 @@ function MyCarousel() {
             autoPlay={true}
             transitionDuration={500}
             partialVisbiles={true}
-            dotListClass="custom-dot-list-styles"
-            className="flex justify-between"
+            className="my-8 pb-10"
         >
-            {text.map((message, i) => {
-                return (
-                    <div className="p-8 overflow-hidden" key={i}>
-                        {message}
-                    </div>
-                );
+            {resumeTemplates.map((message, i) => {
+                return <CarouselItem key={i} message={message} img={""} />;
             })}
         </Carousel>
     );
