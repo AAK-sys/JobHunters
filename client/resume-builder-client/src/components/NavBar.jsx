@@ -44,8 +44,8 @@ function NavBar() {
                     <Link className="mx-4" to={"/users"}>
                         View All Users
                     </Link>
-                    <Link className="mx-4" to={"/resume-builder"}>
-                        Resume Builder
+                    <Link className="mx-4" to={"/create"}>
+                        Create
                     </Link>
                     <Link className="mx-4" to={"/user"}>
                         Add Info
@@ -64,8 +64,8 @@ function NavBar() {
                     <Link to={"/home"}>Resume Builder</Link>
                 </h1>
                 <div className="w-max">
-                    <Link className="mx-4" to={"/resume-builder"}>
-                        Resume Builder
+                    <Link className="mx-4" to={"/create"}>
+                        Create
                     </Link>
                     <Link className="mx-4" to={"/user"}>
                         Add Info

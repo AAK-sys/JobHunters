@@ -1,8 +1,34 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import Layout from "../components/Layout";
+import { UserContext } from "../context/UserContext";
+import MyCarousel from "../components/MyCarousel";
 
 function Home() {
-    return <Layout>Home</Layout>;
+    const { user, setUserContext } = useContext(UserContext);
+    useEffect(() => {
+        if (user) {
+            const token = localStorage.getItem("jwtToken");
+            setUserContext(token);
+            console.log(user);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return (
+        <Layout>
+            <div className="w-5/6 p-24 max-w-5xl mx-auto bg-red-50">
+                <h2 className="text-center text-3xl mb-24">
+                    Create Your Own Resume Now!
+                </h2>
+
+                {/* Carousel */}
+                <div>
+                    <h2>Choose a resume template</h2>
+                    <MyCarousel />
+                </div>
+            </div>
+        </Layout>
+    );
 }
 
 export default Home;

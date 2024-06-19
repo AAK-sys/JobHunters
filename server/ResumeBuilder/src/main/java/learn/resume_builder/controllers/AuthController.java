@@ -39,7 +39,6 @@ public class AuthController {
             if (authentication.isAuthenticated()) {
 
                 User user = service.findByUsername(credentials.getUsername());
-                System.out.println(user.toString());
 
                 String jwtToken = converter.getTokenFromUser(user);
 
