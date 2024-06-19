@@ -3,12 +3,8 @@ import Select from 'react-select';
 
 const DropDown = ({ options, onSelect  }) => {
 
-    const handleChange = (selectedOption) => {
-        onSelect(selectedOption); // Call onSelect function with selected option
-    };
-
   return (
-    <div className="w-64 mx-auto mt-4">
+    <div className="">
       <Select
         options={options}
         onChange={onSelect}

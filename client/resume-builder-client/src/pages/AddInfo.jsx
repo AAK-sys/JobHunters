@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import SampleForm1 from '../forms/SampleForm1';
+import UserInfoForm from '../forms/UserInfoForm';
 import DynamicForm from '../components/DynamicForm';
+import ExperienceForm from '../forms/ExperienceForm';
+import Layout from '../components/Layout';
 
 const AddInfo = () => {
 
@@ -19,11 +22,23 @@ const AddInfo = () => {
     const form = SampleForm1
   
     return ( // add onSelect here so I can control the behavior
+      <Layout>
+      <div className="flex justify-between">
+        <div className="flex-1 mr-4">
+          <UserInfoForm />
+        </div>
+        <div className="flex-1">
+          <ExperienceForm />
+        </div>
+      </div>
        <DynamicForm information={information} 
        setInformation={setInformation} 
        options={options} 
-       FormComponent={form} 
+       FormComponent={form}
        />
+      </Layout>
+       
+       
     );
   };
   

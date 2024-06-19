@@ -7,6 +7,7 @@ const SampleForm1 = ({ information, onChange }) => {
     }
 
     return (
+      <div>
         <form className="bg-transparent" onSubmit={handelSubmit}>
           <div className="mb-4">
             <label htmlFor="name" className="text-gray-700">Name:</label>
@@ -34,6 +35,7 @@ const SampleForm1 = ({ information, onChange }) => {
             Submit
           </button>
         </form>
+      </div>
       );
 };
 

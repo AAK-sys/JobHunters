@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import DropDown from './DropDown';
-import SampleForm1 from '../forms/SampleForm1';
 
 const DynamicForm = ({information, setInformation, options, FormComponent}) => {
   const [selectedOption, setSelectedOption] = useState(null); // State to hold selected option
