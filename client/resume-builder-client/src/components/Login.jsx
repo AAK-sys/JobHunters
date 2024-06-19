@@ -1,26 +1,27 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login } from "../api/auth";
+import { UserContext } from "../context/UserContext";
 import Layout from "./Layout";
 
-const URL = "http://localhost:8080/api/auth";
+const AUTH_URL = "http://localhost:8080/api/auth";
 
-const defaultLogin = {
+const DEFAULT_CREDENTIALS = {
     username: "",
     password: "",
 };
 
 function Login() {
-    const [user, setUser] = useState(defaultLogin);
-    const [errors, setErrors] = useState([]);
+    const { setUserContext } = useContext(UserContext);
+    const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
+    const [error, setError] = useState("");
     const navigate = useNavigate();
 
     const handleChange = (event) => {
         const fieldName = event.target.id;
         const fieldValue = event.target.value;
 
-        setUser(() => ({
-            ...user,
+        setCredentials(() => ({
+            ...credentials,
             [fieldName]: fieldValue,
         }));
     };
@@ -32,24 +33,23 @@ function Login() {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(user),
+            body: JSON.stringify(credentials),
         };
-        fetch(`${URL}/login`, options)
+        fetch(`${AUTH_URL}/login`, options)
             .then((res) => {
                 if (res.status === 200) {
                     return res.json();
                 } else {
-                    return Promise.reject(
-                        `Unexpected status code: ${res.status}`
-                    );
+                    setError("The credentials were invalid.");
                 }
             })
             .then((data) => {
-                if (!data.jwt_token) {
-                    setErrors(data);
+                if (data) {
+                    localStorage.setItem("jwtToken", data.jwt_token);
+                    // SET USER CONTEXT
+                    setUserContext(data.jwt_token);
+                    navigate("/home");
                 }
-                localStorage.setItem("jwtToken", data.jwt_token);
-                navigate("/home");
             });
     };
 
@@ -67,7 +67,7 @@ function Login() {
                             type="text"
                             className="border rounded-lg px-2 py-1 shadow-md"
                             id="username"
-                            value={user.username}
+                            value={credentials.username}
                             onChange={handleChange}
                         />
                     </fieldset>
@@ -79,13 +79,23 @@ function Login() {
                             autoComplete="on"
                             className="border rounded-lg px-2 py-1 shadow-md"
                             id="password"
-                            value={user.password}
+                            value={credentials.password}
                             onChange={handleChange}
                         />
                     </fieldset>
+                    {error && (
+                        <div className="mb-4 bg-red-200 p-4 rounded-lg">
+                            <p className="font-bold border-b-2 border-gray-400 w-max">
+                                The Following Errors Were Found
+                            </p>
 
+                            <li key={error} className="list-disc ml-4 mt-2">
+                                {error}
+                            </li>
+                        </div>
+                    )}
                     <button
-                        className="my-4 border-2 rounded-lg p-1 w-full"
+                        className="mb-4 border-2 rounded-lg p-1 w-full"
                         type="submit"
                     >
                         Sign In

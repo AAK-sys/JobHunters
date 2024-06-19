@@ -49,26 +49,26 @@
 
 **Tuesday**
 
--   [ ] Add Authentication With JWT - **_D2 (Expected Time: 1hr)_**
--   [ ] Build Controllers - **_D2 (Expected Time: 2hrs)_**
-    -   [ ] Build Controllers for model
+-   [x] Add Authentication With JWT - **_D2 (Expected Time: 1hr)_**
+-   [x] Build Controllers - **_D2 (Expected Time: 2hrs)_**
+    -   [x] Build Controllers for model
     -   [ ] Create http test files
 
 ### Front End (React)
 
 **Monday**
 
--   [ ] Landing Page - **_D2 (Expected Time: 0.5hr)_**
-    -   [ ] Login Form
-    -   [ ] Sign Up Form
--   [ ] Home Page - **_D2 (Expected Time: 1hr)_**
-    -   [ ] Navbar
-        -   [ ] Home
-        -   [ ] User Info
+-   [x] Landing Page - **_D2 (Expected Time: 0.5hr, Actual Time: 1hr)_**
+    -   [x] Login Form
+    -   [x] Sign Up Form
+-   [x] Home Page - **_D2 (Expected Time: 1hr, Actual Time: 1hr)_**
+    -   [x] Navbar
+        -   [x] Home
+        -   [x] User Info
 
 **Tuesday**
 
--   Continuation of Home Page **_D2 (Expected Time: 1hr)_**
+-   Continuation of Home Page **_D2 (Expected Time: 1hr, Actual Time: 1hr)_**
 
     -   [ ] Template Carousel
     -   [ ] Templates to build resumes off of - Defaulted to 1 Resume Template for now

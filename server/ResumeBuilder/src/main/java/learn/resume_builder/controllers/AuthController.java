@@ -1,5 +1,6 @@
 package learn.resume_builder.controllers;
 
+import learn.resume_builder.domain.Result;
 import learn.resume_builder.domain.UserService;
 import learn.resume_builder.models.User;
 import learn.resume_builder.security.JwtConverter;
@@ -39,7 +40,6 @@ public class AuthController {
             if (authentication.isAuthenticated()) {
 
                 User user = service.findByUsername(credentials.getUsername());
-                System.out.println(user.toString());
 
                 String jwtToken = converter.getTokenFromUser(user);
 
@@ -54,4 +54,15 @@ public class AuthController {
 
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
+
+    @PostMapping("/signup")
+    public ResponseEntity<Object> register (@RequestBody User credentials){
+        Result<User> result = service.add(credentials);
+        if (result.isSuccess()) {
+            return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
+        }
+        return ErrorResponse.build(result);
+
+    }
+
 }
