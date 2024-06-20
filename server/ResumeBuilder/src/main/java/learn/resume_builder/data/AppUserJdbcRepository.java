@@ -1,6 +1,6 @@
 package learn.resume_builder.data;
 
-import learn.resume_builder.data.mappers.UserMapper;
+import learn.resume_builder.data.mappers.SecurityUserMapper;
 import learn.resume_builder.models.Role;
 import learn.resume_builder.models.User;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,7 +28,7 @@ public class AppUserJdbcRepository implements AppUserRepository{
                 + "from user "
                 + "where username = ?;";
 
-        return jdbcTemplate.query(sql, new UserMapper(), username).stream().findFirst().orElse(null);
+        return jdbcTemplate.query(sql, new SecurityUserMapper(), username).stream().findFirst().orElse(null);
     }
 
 

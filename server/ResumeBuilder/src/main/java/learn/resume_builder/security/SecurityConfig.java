@@ -1,5 +1,6 @@
 package learn.resume_builder.security;
 
+import learn.resume_builder.data.AppUserJdbcRepository;
 import learn.resume_builder.data.UserJdbcTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +25,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtConverter converter;
-    private UserJdbcTemplateRepository userRepository;
+    private AppUserJdbcRepository userRepository;
 
     @Autowired
-    public SecurityConfig(JwtConverter converter, UserJdbcTemplateRepository userRepository) {
+    public SecurityConfig(JwtConverter converter, AppUserJdbcRepository userRepository) {
         this.converter = converter;
         this.userRepository = userRepository;
     }
@@ -39,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/user/all").hasRole("ADMIN")
+                .antMatchers("/api/user/all").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManagerBean(), converter))
