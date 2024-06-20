@@ -1,5 +1,6 @@
 package learn.resume_builder.security;
 
+import learn.resume_builder.data.AppUserJdbcRepository;
 import learn.resume_builder.data.UserJdbcTemplateRepository;
 import learn.resume_builder.data.UserRepository;
 import learn.resume_builder.models.Role;
@@ -19,18 +20,18 @@ import java.util.stream.Collectors;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private UserJdbcTemplateRepository userRepository;
+    private AppUserJdbcRepository repo;
 
     @Autowired
-    public CustomUserDetailsService(UserJdbcTemplateRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomUserDetailsService(AppUserJdbcRepository repo) {
+        this.repo = repo;
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        learn.resume_builder.models.User user = userRepository.findByUsername(s);
+        learn.resume_builder.models.User user = repo.findByUsername(s);
 
-        if (user == null) {
+        if (user == null || user.isDisabled()) {
             throw new UsernameNotFoundException("User not found with username: " + s);
         }
         Collection<GrantedAuthority> authorities = mapRolesToAuthorities(user.getRoles());

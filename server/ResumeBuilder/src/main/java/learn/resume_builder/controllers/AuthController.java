@@ -3,8 +3,10 @@ package learn.resume_builder.controllers;
 import learn.resume_builder.domain.Result;
 import learn.resume_builder.domain.UserService;
 import learn.resume_builder.models.User;
+import learn.resume_builder.security.AppUserService;
 import learn.resume_builder.security.JwtConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,18 +14,20 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ValidationException;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin({"http://localhost:3000"})
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtConverter converter;
-    private final UserService service;
+    private final AppUserService service;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtConverter converter, UserService service) {
+    public AuthController(AuthenticationManager authenticationManager, JwtConverter converter, AppUserService service) {
         this.authenticationManager = authenticationManager;
         this.converter = converter;
         this.service = service;
@@ -57,11 +61,22 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<Object> register (@RequestBody User credentials){
-        Result<User> result = service.add(credentials);
-        if (result.isSuccess()) {
-            return new ResponseEntity<>(result.getPayload(), HttpStatus.CREATED);
+        try {
+            String username = credentials.getUsername();
+            String password = credentials.getPassword();
+            String email = credentials.getEmail();
+
+            User user = service.create(username, password, email);
+
+        } catch (ValidationException ex) {
+            return new ResponseEntity<>(List.of(ex.getMessage()), HttpStatus.BAD_REQUEST);
+        } catch (DuplicateKeyException ex) {
+            return new ResponseEntity<>(List.of("The provided username already exists"), HttpStatus.BAD_REQUEST);
         }
-        return ErrorResponse.build(result);
+
+        // happy path...
+
+        return new ResponseEntity<>(null, HttpStatus.CREATED);
 
     }
 

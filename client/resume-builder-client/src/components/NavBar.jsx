@@ -15,6 +15,7 @@ function NavBar() {
             const decodedData = jwtDecode(token);
             setIsAdmin(decodedData.authorities.includes("ADMIN"));
             setIsUser(decodedData.authorities.includes("USER"));
+            console.log(token);
         }
     }, [token]);
 
