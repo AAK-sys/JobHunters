@@ -20,6 +20,17 @@ h4 {
     letter-spacing: 1.5px;
 }
 
+.all-users th,
+.all-users td {
+    border: 1px solid;
+    padding: 1%;
+    text-align: center;
+}
+
+.all-users th {
+    width: 200px;
+}
+
 .nav-item {
     padding: 1%;
     border-radius: 0.5rem;
