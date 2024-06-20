@@ -30,8 +30,8 @@ h4 {
     background-color: rgba(226, 232, 240, 0.8);
 }
 
-.builder-dropdown {
-    border: 2px solid red;
+.builder-dropdown,
+.builder-info {
     width: 80%;
     margin: auto;
 }

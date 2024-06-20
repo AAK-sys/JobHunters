@@ -10,10 +10,11 @@ function NavBar() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const token = localStorage.getItem("jwtToken");
         if (token !== null) {
-            const decodedToken = jwtDecode(token);
-            setIsAdmin(decodedToken.authorities.includes("ADMIN"));
-            setIsUser(decodedToken.authorities.includes("USER"));
+            const decodedData = jwtDecode(token);
+            setIsAdmin(decodedData.authorities.includes("ADMIN"));
+            setIsUser(decodedData.authorities.includes("USER"));
         }
     }, [token]);
 
