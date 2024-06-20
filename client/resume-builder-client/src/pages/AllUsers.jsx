@@ -6,6 +6,7 @@ const USER_URL = "http://localhost:8080/api/user";
 function AllUsers() {
     const [users, setUsers] = useState([]);
     const [success, setSuccess] = useState("");
+    //const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("jwtToken");
@@ -20,8 +21,12 @@ function AllUsers() {
             .then((res) => res.json())
             .then((data) => {
                 setUsers(data);
+            }).catch(() => {
+                //localStorage.removeItem("jwtToken");
+                //navigate("/");
             });
     }, []);
+
 
     const toggleUserDisable = (id) => {
         if (window.confirm(`Are you sure you want to disable user ${id}?`)) {
@@ -81,7 +86,7 @@ function AllUsers() {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user) => {
+                        {users.lenght > 0 && users.map((user) => {
                             return (
                                 <tr key={user.userId}>
                                     <td>{user.userId}</td>
