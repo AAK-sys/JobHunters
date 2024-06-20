@@ -23,7 +23,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        final String sql = "select user_id, email, password_hash, username, disabled "
+        final String sql = "select user_id, email, username, disabled "
                 + "from user limit 1000;";
 
         return jdbcTemplate.query(sql, new UserMapper());
@@ -32,7 +32,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
     @Override
     @Transactional
     public User findById(int userId) {
-        final String sql = "select user_id, email, password_hash, username, disabled "
+        final String sql = "select user_id, email, username, disabled "
                 + "from user "
                 + "where user_id = ?;";
 
@@ -55,7 +55,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
     @Override
     public User findByUsername(String s) {
-        final String sql = "select user_id, email, password_hash, username, disabled "
+        final String sql = "select user_id, email, username, disabled "
                 + "from user "
                 + "where username = ?;";
 
@@ -76,16 +76,15 @@ public class UserJdbcTemplateRepository implements UserRepository {
         return user;
     }
 
-
+    @Deprecated
     @Override
     public User add(User user) {
-        final String sql = "insert into user (email, password_hash, username) "
+        final String sql = "insert into user (email, username) "
                 + "values (?,?,?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
             ps.setString(3, user.getUsername());
             return ps;
         }, keyHolder);

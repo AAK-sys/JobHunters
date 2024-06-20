@@ -10,10 +10,12 @@ function NavBar() {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const token = localStorage.getItem("jwtToken");
         if (token !== null) {
-            const decodedToken = jwtDecode(token);
-            setIsAdmin(decodedToken.authorities.includes("ADMIN"));
-            setIsUser(decodedToken.authorities.includes("USER"));
+            const decodedData = jwtDecode(token);
+            setIsAdmin(decodedData.authorities.includes("ADMIN"));
+            setIsUser(decodedData.authorities.includes("USER"));
+            console.log(token);
         }
     }, [token]);
 
@@ -29,17 +31,19 @@ function NavBar() {
                     <Link to={token ? "/home" : "/"}>Resume Builder</Link>
                 </h1>
                 <div className="w-1/3 flex justify-end">
-                    {token === null && (
+                    {!isAdmin && !isUser && (
                         <Link className="nav-item" to={"/login"}>
                             Login
                         </Link>
                     )}
-                    {isAdmin && (
-                        // Navigation for admin
+                    {/* // Navigation for admin */}
+                    {isUser && (
                         <>
-                            <Link className="mx-4 nav-item" to={"/users"}>
-                                View All Users
-                            </Link>
+                            {isAdmin && (
+                                <Link className="mx-4 nav-item" to={"/users"}>
+                                    View All Users
+                                </Link>
+                            )}
                             <Link className="mx-4 nav-item" to={"/create"}>
                                 Create
                             </Link>
@@ -48,24 +52,7 @@ function NavBar() {
                             </Link>
                             <button
                                 className="ml-4 text-xl nav-item"
-                                onClick={() => signOut()}
-                            >
-                                Sign Out
-                            </button>
-                        </>
-                    )}
-                    {!isAdmin && isUser && (
-                        // Navigation for users
-                        <>
-                            <Link className="mx-4 nav-item" to={"/create"}>
-                                Create
-                            </Link>
-                            <Link className="mx-4 nav-item" to={"/user"}>
-                                Add Info
-                            </Link>
-                            <button
-                                className="ml-4 text-xl nav-item"
-                                onClick={() => signOut()}
+                                onClick={signOut}
                             >
                                 Sign Out
                             </button>

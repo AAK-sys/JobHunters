@@ -1,16 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import Layout from "../components/Layout";
-import { UserContext } from "../context/UserContext";
-import BuilderDropDown from "../components/BuilderDropDown";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+    faPlus,
+    faPenToSquare,
+    faDownload,
+} from "@fortawesome/free-solid-svg-icons";
+import { jwtDecode } from "jwt-decode";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+
+import Layout from "../components/Layout";
+import BuilderDropDown from "../components/BuilderDropDown";
 import ResumeView from "../components/ResumeView";
+import BuilderButton from "../components/BuilderAddButton";
 
 const SKILL_URL = "http://localhost:8080/api/skill";
 
 function Create() {
-    const { user, setUserContext } = useContext(UserContext);
     const [userInfo, setUserInfo] = useState({});
     const [summaries, setSummaries] = useState([]);
     const [educations, setEducations] = useState([]);
@@ -23,18 +29,38 @@ function Create() {
     const [selectExperiences, setSelectExperiences] = useState([]);
     const [selectSkills, setSelectSkills] = useState([]);
 
-    // fetch user from context if there isn't one
-    useEffect(() => {
-        if (user) {
-            const token = localStorage.getItem("jwtToken");
-            setUserContext(token);
+    const navigate = useNavigate();
 
-            // populate user info into arrays
-            setUserInfo(user.userInfo);
-            setSummaries(user.summaries);
-            setEducations(user.educations);
-            setExperieneces(user.experiences);
+    // fetch user info
+    useEffect(() => {
+        const token = localStorage.getItem("jwtToken");
+        if (!token) {
+            navigate("/login");
         }
+        const decodedData = jwtDecode(token);
+        const options = {
+            method: "GET",
+            headers: {
+                Authorization: "Bearer " + token,
+            },
+        };
+        fetch(`http://localhost:8080/api/user?name=${decodedData.sub}`, options)
+            .then((res) => {
+                if (res.status === 200) {
+                    return res.json();
+                } else {
+                    return Promise.reject(
+                        `Unexpected status code: ${res.status}`
+                    );
+                }
+            })
+            .then((data) => {
+                // populate user info into arrays
+                setUserInfo(data.userInfo);
+                setSummaries(data.summaries);
+                setEducations(data.educations);
+                setExperieneces(data.experiences);
+            });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -70,16 +96,38 @@ function Create() {
 
     return (
         <Layout className="flex flex-col md:flex-row md:justify-between">
-            <div className="w-full md:ml-8 md:mr-2 md:my-0 mx-0 my-4 bg-blue-50">
-                <h2>Select Info To Add</h2>
-                <div className="flex flex-col gap-12">
-                    <div className="border w-4/5">
-                        <h2>Add User Info</h2>
-                        {userInfo.email}
-                    </div>
-                    <div className="builder-dropdown">
-                        <h2>Add Summaries</h2>
-                        {summaries && (
+            <div className="w-full md:ml-8 md:mr-4 md:my-0 mx-0 my-4 pb-16 md:pb-16 md:overflow-y-scroll">
+                <h2 className="text-center text-2xl mt-8">
+                    Select Info To Add To View Resume
+                </h2>
+                <div className="flex flex-col gap-8 mt-8">
+                    {userInfo && (
+                        <div className="flex flex-col gap-4 text-center builder-info">
+                            <h2>Your Profile</h2>
+                            <div className="flex justify-evenly">
+                                <h3>Full Name: {userInfo.fullName}</h3>
+                                <h3>Email: {userInfo.email}</h3>
+                            </div>
+                            <div className="flex justify-evenly">
+                                {userInfo.phone && (
+                                    <h3>Phone: {userInfo.phone}</h3>
+                                )}
+                                {userInfo.website && (
+                                    <h3>Website: {userInfo.website}</h3>
+                                )}
+                                {userInfo.location && (
+                                    <h2>Location: {userInfo.location}</h2>
+                                )}
+                            </div>
+                            <BuilderButton
+                                icon={faPenToSquare}
+                                text="Edit Profile"
+                            />
+                        </div>
+                    )}
+                    {summaries && (
+                        <div className="builder-dropdown">
+                            <h2 className="mb-4">Select Summaries</h2>
                             <BuilderDropDown
                                 objValue={selectSummaries}
                                 handleChange={handleSummaryChange}
@@ -87,54 +135,95 @@ function Create() {
                                 label="displayName"
                                 idString="summaryId"
                             />
-                        )}
-                        <Link
-                            className="flex gap-2 items-center border border-black rounded-lg p-2 w-max float-right mt-2"
-                            to="/user"
-                        >
-                            <FontAwesomeIcon icon={faPlus} />
-                            <span>Add Summaries?</span>
-                        </Link>
-                    </div>
-                    <div className="builder-dropdown">
-                        <h2>Add Educations</h2>
-                        {educations && (
-                            <BuilderDropDown
-                                objValue={selectEducations}
-                                handleChange={handleEducationChange}
-                                objArray={educations}
-                                label="universityName"
-                                idString="educationId"
+                            <BuilderButton icon={faPlus} text="Add Summary" />
+                        </div>
+                    )}
+                    {educations && (
+                        <div className="builder-dropdown">
+                            <h2 className="mb-4">Select Educations</h2>
+                            {educations && (
+                                <BuilderDropDown
+                                    objValue={selectEducations}
+                                    handleChange={handleEducationChange}
+                                    objArray={educations}
+                                    label="universityName"
+                                    idString="educationId"
+                                />
+                            )}
+                            <BuilderButton icon={faPlus} text="Add Education" />
+                        </div>
+                    )}
+                    {experiences && (
+                        <div className="builder-dropdown">
+                            <h2 className="mb-4">Select Experiences</h2>
+                            {experiences && (
+                                <BuilderDropDown
+                                    objValue={selectExperiences}
+                                    handleChange={handleExperienceChange}
+                                    objArray={experiences}
+                                    label="companyName"
+                                    idString="experienceId"
+                                />
+                            )}
+                            <BuilderButton
+                                icon={faPlus}
+                                text="Add Experience"
                             />
-                        )}
-                    </div>
-                    <div className="builder-dropdown">
-                        <h2>Add Experiences</h2>
-                        {experiences && (
+                        </div>
+                    )}
+                    {skills && (
+                        <div className="builder-dropdown">
+                            <h2 className="mb-4">Select Skills</h2>
                             <BuilderDropDown
-                                objValue={selectExperiences}
-                                handleChange={handleExperienceChange}
-                                objArray={experiences}
-                                label="companyName"
-                                idString="experienceId"
+                                objValue={selectSkills}
+                                handleChange={handleSkillChange}
+                                objArray={skills}
+                                label="name"
+                                idString="skillId"
                             />
-                        )}
-                    </div>
-                    <div className="builder-dropdown">
-                        <h2>Add Skills</h2>
-                        <BuilderDropDown
-                            objValue={selectSkills}
-                            handleChange={handleSkillChange}
-                            objArray={skills}
-                            label="name"
-                            idString="skillId"
-                        />
-                    </div>
+                            <BuilderButton icon={faPlus} text="Add Skill" />
+                        </div>
+                    )}
                 </div>
             </div>
-            <div className="w-full md:ml-2 md:mr-8 md:my-0 mx-0 my-4 bg-blue-50">
-                PDF RENDERER
-                <ResumeView />
+            <div className="w-full md:ml-4 md:mr-8 md:my-0 mx-0 my-4 md:overflow-y-scroll">
+                <div className="flex flex-col gap-4 m-auto mt-4 lg:w-2/3 md:w-5/6 sm:w-5/6 border border-black p-1 rounded-md">
+                    <PDFViewer height="900px" width="100%">
+                        <ResumeView
+                            userInfo={userInfo}
+                            selectSummaries={selectSummaries}
+                            selectEducations={selectEducations}
+                            selectExperiences={selectExperiences}
+                            selectSkills={selectSkills}
+                        />
+                    </PDFViewer>
+                    <hr />
+                    <PDFDownloadLink
+                        document={
+                            <ResumeView
+                                userInfo={userInfo}
+                                selectSummaries={selectSummaries}
+                                selectEducations={selectEducations}
+                                selectExperiences={selectExperiences}
+                                selectSkills={selectSkills}
+                            />
+                        }
+                        fileName="resume.pdf"
+                    >
+                        {({ blob, url, loading, error }) =>
+                            loading ? (
+                                <>"Loading document..."</>
+                            ) : (
+                                <div className="flex items-center border border-black rounded-lg p-2 w-max m-auto">
+                                    <FontAwesomeIcon icon={faDownload} />
+                                    <span className="ml-2">
+                                        Download Resume as PDF
+                                    </span>
+                                </div>
+                            )
+                        }
+                    </PDFDownloadLink>
+                </div>
             </div>
         </Layout>
     );

@@ -213,7 +213,7 @@ function ExperienceForm({ formData, handleChange }) {
                     {formData.experienceId > 0 && (
                         <button
                             name="delete"
-                            type="submit"
+                            type="button"
                             onClick={deleteExp}
                             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
                         >

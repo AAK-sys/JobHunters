@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin({"http://localhost:3000"})
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -18,6 +18,11 @@ public class UserController {
 
     public UserController(UserService service) {
         this.service = service;
+    }
+
+    @GetMapping("/all")
+    public List<User> getUsers() {
+        return service.findAll();
     }
 
     @GetMapping("/{id}")

@@ -13,11 +13,11 @@ const BuilderDropDown = ({
             className="w-full"
             value={objValue}
             onChange={handleChange}
-            options={objArray.map((item) => {
+            options={objArray.map((item, i) => {
                 return {
                     label: item[label],
                     value: item,
-                    key: item[idString],
+                    key: `${item[idString]}${i}`,
                 };
             })}
             isSearchable={true}
