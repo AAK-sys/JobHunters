@@ -19,7 +19,7 @@ function UserInfoForm() { //{ information, onChange }
 
     return (
         <div className='w-auto p-4'>
-            <form className="p-3 pt-4 bg-white  rounded-md shadow">
+            <form className="p-3 pt-4 bg-white rounded-md">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Personal Information</h2>
                 <div className="flex flex-col gap-3">
                     <div className="flex flex-col gap-1">
