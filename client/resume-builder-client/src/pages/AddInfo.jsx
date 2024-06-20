@@ -55,7 +55,7 @@ const AddInfo = () => {
                 setEducation(data.educations || []);
                 setUserInfo(data.userInfo || defaultUserInfo);
             });
-    }, [navigate]);
+    }, []);
 
     useEffect(() => {
         const summaryMap = summary.reduce((acc, s) => {
@@ -144,10 +144,10 @@ const AddInfo = () => {
     }, [user]);
 
     const defaultUserInfo = {
-        name: "",
+        fullName: "",
         email: "",
         phone: "",
-        url: "",
+        website: "",
         location: "",
         userId: user.userId,
     };

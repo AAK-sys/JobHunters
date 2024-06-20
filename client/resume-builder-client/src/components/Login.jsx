@@ -92,7 +92,7 @@ function Login() {
                         </div>
                     )}
                     <button
-                        className="mb-4 border-2 rounded-lg p-1 w-full"
+                        className="mb-4 border-2 rounded-lg p-1 w-full sign-up-button"
                         type="submit"
                     >
                         Sign In

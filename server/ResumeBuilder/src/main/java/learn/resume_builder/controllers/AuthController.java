@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @RestController
-@CrossOrigin({"http://localhost:3000"})
+@CrossOrigin
 @RequestMapping("/api/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
@@ -75,7 +75,6 @@ public class AuthController {
         }
 
         // happy path...
-
         return new ResponseEntity<>(null, HttpStatus.CREATED);
 
     }

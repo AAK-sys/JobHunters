@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function SummaryForm({ formData, handleChange }) {
+function SummaryForm({ formData, handleChange, options, setOptions }) {
     const [prepareForChange, setPrepareForChange] = useState(false);
 
     const URL =
@@ -31,21 +31,29 @@ function SummaryForm({ formData, handleChange }) {
 
         fetch(`${URL}`, options)
             .then((res) => {
-                if (res.status === 201 || res.status === 204) {
-                    alert(
-                        `your data has been ${
-                            res.status === 201 ? "Added" : "updated"
-                        }`
+                console.log(res.status);
+                if (res.status === 204) {
+                    return null;
+                } else if (res.status === 201 || res.status === 400) {
+                    return res.json();
+                } else {
+                    return Promise.reject(
+                        `Unexpected status code: ${res.status}`
                     );
                 }
-
-                return res.json();
             })
             .then((data) => {
-                if (data) {
-                    alert(data, "hello from data");
-                    console.log(data);
+                console.log(data);
+                if (!data) {
+                    alert("Updated Form");
+                } else if (data.summaryId) {
+                    alert("Added Summary");
+                    // setOptions([...options, data]);
+                } else {
+                    alert("Errors");
                 }
+                // alert(data, "hello from data");
+                // console.log(data);
             })
             .catch((e) => {
                 //alert(e);

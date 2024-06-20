@@ -48,7 +48,9 @@ function SignUp() {
         };
         fetch(`${AUTH_URL}/signup`, options)
             .then((res) => {
-                if (res.status === 201 || res.status === 400) {
+                if (res.status === 201) {
+                    return null;
+                } else if (res.status === 400) {
                     return res.json();
                 } else {
                     return Promise.reject(
@@ -57,7 +59,7 @@ function SignUp() {
                 }
             })
             .then((data) => {
-                if (data.userId) {
+                if (!data) {
                     setErrors([]);
                     setSuccess("Your account has been created.");
                     setTimeout(() => {
@@ -152,7 +154,7 @@ function SignUp() {
                     )}
 
                     <button
-                        className="mb-4 border-2 rounded-lg p-1 w-full"
+                        className="mb-4 border-2 rounded-lg p-1 w-full sign-up-button"
                         type="submit"
                     >
                         Sign up!

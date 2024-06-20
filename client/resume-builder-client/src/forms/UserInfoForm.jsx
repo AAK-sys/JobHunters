@@ -75,8 +75,8 @@ function UserInfoForm({ formData, setFormData }) {
                         </label>
                         <input
                             type="text"
-                            name="name"
-                            value={formData.name || ""}
+                            name="fullName"
+                            value={formData.fullName || ""}
                             onChange={handleChange}
                             className="px-3 py-2 border border-gray-300 rounded-md shadow-sm outline-none text-gray-900"
                         />
@@ -115,8 +115,8 @@ function UserInfoForm({ formData, setFormData }) {
                             <input
                                 type="text"
                                 placeholder="linkedin.com/in/username"
-                                name="url"
-                                value={formData.url || ""}
+                                name="website"
+                                value={formData.website || ""}
                                 onChange={handleChange}
                                 className="px-3 py-2 border border-gray-300 rounded-md shadow-sm outline-none text-gray-900"
                             />

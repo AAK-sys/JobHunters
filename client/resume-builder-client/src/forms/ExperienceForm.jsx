@@ -70,18 +70,6 @@ function ExperienceForm({ formData, handleChange }) {
             });
     };
 
-    const submitRequest = (event) => {
-        event.preventDefault();
-
-        const name = event.target.name;
-
-        if (name.includes("wildcard")) {
-            addOrUpdate();
-        } else {
-            deleteExp();
-        }
-    };
-
     const registerChange = (event) => {
         handleChange(event);
         setPrepareForChange(true);
@@ -89,7 +77,7 @@ function ExperienceForm({ formData, handleChange }) {
 
     return (
         <div className="w-auto p-2">
-            <form className="bg-white rounded-md" onSubmit={submitRequest}>
+            <form className="bg-white rounded-md">
                 <div className="mb-4">
                     <label
                         htmlFor="displayName"

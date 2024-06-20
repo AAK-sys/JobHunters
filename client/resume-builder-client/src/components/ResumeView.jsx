@@ -96,17 +96,20 @@ function ResumeView({
         <Document style={styles.document}>
             <Page size="A4" styles={styles.page}>
                 {/* User Info */}
-                <View style={styles.section}>
-                    <Text style={styles.userInfo.name}>
-                        {userInfo.fullName}
-                    </Text>
-                    <View style={styles.userInfo.info}>
-                        <Text>{userInfo.email}</Text>
-                        <Text>{userInfo.phone}</Text>
-                        <Text>{userInfo.website}</Text>
-                        <Text>{userInfo.location}</Text>
+                {userInfo && (
+                    <View style={styles.section}>
+                        <Text style={styles.userInfo.name}>
+                            {userInfo.fullName}
+                        </Text>
+                        <View style={styles.userInfo.info}>
+                            <Text>{userInfo.email}</Text>
+                            <Text>{userInfo.phone}</Text>
+                            <Text>{userInfo.website}</Text>
+                            <Text>{userInfo.location}</Text>
+                        </View>
                     </View>
-                </View>
+                )}
+
                 {/* Summary */}
                 {selectSummaries.length > 0 && (
                     <View style={styles.section}>

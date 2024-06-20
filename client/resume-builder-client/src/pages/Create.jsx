@@ -96,19 +96,19 @@ function Create() {
 
     return (
         <Layout className="flex flex-col md:flex-row md:justify-between">
-            <div className="w-full md:ml-8 md:mr-4 md:my-0 mx-0 my-4 pb-16 md:pb-16 md:overflow-y-scroll">
+            <div className="w-full lg:ml-8 lg:mr-4 lg:my-0 mx-0 my-4 pb-16 md:pb-16 md:overflow-y-scroll">
                 <h2 className="text-center text-2xl mt-8">
                     Select Info To Add To View Resume
                 </h2>
                 <div className="flex flex-col gap-8 mt-8">
-                    {userInfo && (
+                    {userInfo ? (
                         <div className="flex flex-col gap-4 text-center builder-info">
                             <h2>Your Profile</h2>
-                            <div className="flex justify-evenly">
+                            <div className="flex justify-between">
                                 <h3>Full Name: {userInfo.fullName}</h3>
                                 <h3>Email: {userInfo.email}</h3>
                             </div>
-                            <div className="flex justify-evenly">
+                            <div className="flex justify-between">
                                 {userInfo.phone && (
                                     <h3>Phone: {userInfo.phone}</h3>
                                 )}
@@ -120,8 +120,17 @@ function Create() {
                                 )}
                             </div>
                             <BuilderButton
+                                className="profile-button"
                                 icon={faPenToSquare}
                                 text="Edit Profile"
+                            />
+                        </div>
+                    ) : (
+                        <div className="builder-dropdown">
+                            <BuilderButton
+                                className="profile-button"
+                                icon={faPenToSquare}
+                                text="Set Profile"
                             />
                         </div>
                     )}
@@ -135,7 +144,11 @@ function Create() {
                                 label="displayName"
                                 idString="summaryId"
                             />
-                            <BuilderButton icon={faPlus} text="Add Summary" />
+                            <BuilderButton
+                                className="summary-button"
+                                icon={faPlus}
+                                text="Add Summary"
+                            />
                         </div>
                     )}
                     {educations && (
@@ -150,7 +163,11 @@ function Create() {
                                     idString="educationId"
                                 />
                             )}
-                            <BuilderButton icon={faPlus} text="Add Education" />
+                            <BuilderButton
+                                className="education-button"
+                                icon={faPlus}
+                                text="Add Education"
+                            />
                         </div>
                     )}
                     {experiences && (
@@ -166,6 +183,7 @@ function Create() {
                                 />
                             )}
                             <BuilderButton
+                                className="experience-button"
                                 icon={faPlus}
                                 text="Add Experience"
                             />
@@ -181,7 +199,11 @@ function Create() {
                                 label="name"
                                 idString="skillId"
                             />
-                            <BuilderButton icon={faPlus} text="Add Skill" />
+                            <BuilderButton
+                                className="skill-button"
+                                icon={faPlus}
+                                text="Add Skill"
+                            />
                         </div>
                     )}
                 </div>
