@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
 import Layout from "./Layout";
 
 const AUTH_URL = "http://localhost:8080/api/auth";
@@ -11,7 +10,6 @@ const DEFAULT_CREDENTIALS = {
 };
 
 function Login() {
-    const { setUserContext } = useContext(UserContext);
     const [credentials, setCredentials] = useState(DEFAULT_CREDENTIALS);
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -47,7 +45,6 @@ function Login() {
                 if (data) {
                     localStorage.setItem("jwtToken", data.jwt_token);
                     // SET USER CONTEXT
-                    setUserContext(data.jwt_token);
                     navigate("/home");
                 }
             });
