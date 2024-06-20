@@ -16,6 +16,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @EnableWebSecurity
@@ -32,10 +34,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.csrf().disable();
+        http.cors();
+        http
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .anyRequest().permitAll() // for now
+                .antMatchers(HttpMethod.GET, "/api/user/all").hasRole("ADMIN")
+                .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtRequestFilter(authenticationManagerBean(), converter))
                 .sessionManagement()
@@ -69,6 +74,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("*");
+            }
+        };
     }
 }
 
