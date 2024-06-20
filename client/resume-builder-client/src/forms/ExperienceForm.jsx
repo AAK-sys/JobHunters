@@ -1,10 +1,21 @@
 import { useState } from 'react'
 
-function ExperienceForm({formData, setFormData, handleChange}) {
+function ExperienceForm({formData, handleChange}) {
+
+    const [prepareForChange, setPrepareForChange] = useState(false);
+
+    const buttonClass = !prepareForChange 
+    ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md" 
+    : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
 
     const submitRequest = (event) =>{
         event.preventDefault();
         console.log(formData.experienceId == 0 ? "Add" : "edit", formData);
+    }
+
+    const registerChange = (event) =>{
+        handleChange(event);
+        setPrepareForChange(true);
     }
 
     return (
@@ -17,7 +28,7 @@ function ExperienceForm({formData, setFormData, handleChange}) {
                     id="displayName" 
                     name="displayName" 
                     value={formData.displayName} 
-                    onChange={handleChange} 
+                    onChange={registerChange} 
                     placeholder="Enter display name" 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
@@ -30,7 +41,7 @@ function ExperienceForm({formData, setFormData, handleChange}) {
                     id="companyName" 
                     name="companyName" 
                     value={formData.companyName} 
-                    onChange={handleChange} 
+                    onChange={registerChange} 
                     placeholder="Enter company name" 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
@@ -43,7 +54,7 @@ function ExperienceForm({formData, setFormData, handleChange}) {
                     id="role" 
                     name="role" 
                     value={formData.role} 
-                    onChange={handleChange} 
+                    onChange={registerChange} 
                     placeholder="Enter your role" 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 />
@@ -53,11 +64,11 @@ function ExperienceForm({formData, setFormData, handleChange}) {
                 <div className="flex-1">
                     <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
                     <input 
-                    type="text" 
+                    type="date" 
                     id="startDate" 
                     name="startDate" 
                     value={formData.startDate} 
-                    onChange={handleChange} 
+                    onChange={registerChange} 
                     placeholder="MM/YYYY" 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
@@ -65,11 +76,11 @@ function ExperienceForm({formData, setFormData, handleChange}) {
                 <div className="flex-1">
                     <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 mb-1">End Date (if applicable)</label>
                     <input 
-                    type="text" 
+                    type="date" 
                     id="endDate" 
                     name="endDate" 
                     value={formData.endDate} 
-                    onChange={handleChange} 
+                    onChange={registerChange} 
                     placeholder="MM/YYYY" 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
@@ -83,7 +94,7 @@ function ExperienceForm({formData, setFormData, handleChange}) {
                     id="description" 
                     name="description" 
                     value={formData.description == null ? "" : formData.description} 
-                    onChange={handleChange} 
+                    onChange={registerChange} 
                     placeholder="Describe your role and responsibilities"
                     rows="3" 
                     className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none"
@@ -100,9 +111,9 @@ function ExperienceForm({formData, setFormData, handleChange}) {
                 </button> || ''}
                 <button 
                     type="submit" 
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                    className={buttonClass}
                 >
-                    {formData.role == '' ? "add new experience" : "edit experience"}
+                    {formData.role == '' ? "add new experience" : "confirm changes"}
                 </button>
             </div>
         </form>

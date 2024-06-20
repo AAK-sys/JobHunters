@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DropDown from './DropDown';
 
-const DynamicForm = ({information, setInformation, options, FormComponent}) => {
+const DynamicForm = ({information, setInformation, options, FormComponent, title}) => {
   const [selectedOption, setSelectedOption] = useState(null); // State to hold selected option
 
 
@@ -12,6 +12,7 @@ const DynamicForm = ({information, setInformation, options, FormComponent}) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(information);
     setInformation({
       ...information,
       [selectedOption.value]: {
@@ -22,9 +23,9 @@ const DynamicForm = ({information, setInformation, options, FormComponent}) => {
   };
 
   return (
-    <div className="p-2 m-5 rounded-lg w-[45%] shadow">
-      <div className="flex justify-between mb-4">
-        <h2 className="text-xl font-semibold text-gray-700 mr-3">Form Title</h2>
+    <div className="p-2 m-3 rounded-lg w-[45%] shadow">
+      <div className="flex justify-between mb-2 pt-2">
+        <h2 className="text-xl font-semibold text-gray-700 mr-3">{title}</h2>
         <DropDown options={options} onSelect={handleChange} />
       </div>
       <div className="mt-4">
@@ -32,7 +33,6 @@ const DynamicForm = ({information, setInformation, options, FormComponent}) => {
         {selectedOption && (
           <FormComponent
             formData={information[selectedOption.value]}
-            setFormData={setInformation}
             handleChange={handleInputChange}
           />
           )}

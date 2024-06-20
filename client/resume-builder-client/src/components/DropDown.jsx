@@ -9,6 +9,7 @@ const DropDown = ({ options, onSelect  }) => {
         options={options}
         onChange={onSelect}
         isSearchable={true}
+        menuPlacement="auto"
         placeholder="Select an option"
       />
     </div>
