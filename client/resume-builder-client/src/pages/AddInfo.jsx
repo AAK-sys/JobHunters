@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from 'react-router-dom';
-import SampleForm1 from '../forms/SampleForm1';
 import UserInfoForm from '../forms/UserInfoForm';
 import DynamicForm from '../components/DynamicForm';
 import ExperienceForm from '../forms/ExperienceForm';
@@ -10,25 +9,6 @@ import { jwtDecode } from "jwt-decode";
 import SummaryForm from '../forms/SummaryForm';
 
 const AddInfo = () => {
-  const [information, setInformation] = useState({
-    value1: { name: 'John', email: 'john@example.com' },
-    value2: { name: 'Jane', email: 'jane@example.com' },
-    value3: { name: 'Bob', email: 'bob@example.com' }
-  });
-
-  const options = [
-    { value: 'value1', label: 'entry 1' },
-    { value: 'value2', label: 'entry 2' },
-    { value: 'value3', label: 'entry 3' },
-  ];
-
-  const defaultUserInfo = {
-    fullName: '',
-    email: '',
-    phone: '',
-    website: '',
-    location: ''
-  }
 
   const [user, setUser] = useState({});
   const [userInfo, setUserInfo] = useState([]);
@@ -118,13 +98,15 @@ const AddInfo = () => {
       role: '',
       startDate: '',
       endDate: '',
-      description: ''
+      description: '',
+      userId: user.userId
     };
 
     const defaultSummary = {
       summaryId: 0,
       displayName: '',
-      description: ''
+      description: '',
+      userId: user.userId
     }
 
     const defaultEducation = {
@@ -134,7 +116,8 @@ const AddInfo = () => {
       gpa: '',
       startDate: '',
       endDate: '',
-      description: ''
+      description: '',
+      userId: user.userId
     }
     
     educationMap[0] = defaultEducation;
@@ -153,12 +136,19 @@ const AddInfo = () => {
     setEducationInfo(educationMap);
     setEducationOptions(educationOptionsArray);
 
-    console.log(educationInfo);
-    console.log(educationOptions);
+    console.log(user);
 
   }, [user]);
-  
-  
+
+  const defaultUserInfo = {
+    fullName: '',
+    email: '',
+    phone: '',
+    website: '',
+    location: '',
+    userId: user.userId
+  };
+
   const summaryForm = SummaryForm;
   const experienceForm = ExperienceForm;
   const educationForm = EducationForm;
@@ -170,6 +160,7 @@ const AddInfo = () => {
           information={summaryInfo}
           setInformation={setSummaryInfo}
           options={summaryOptions}
+          setOptions={setSummaryOptions}
           FormComponent={summaryForm}
       />
       <DynamicForm
@@ -177,6 +168,7 @@ const AddInfo = () => {
           information={experienceInfo}
           setInformation={setExperienceInfo}
           options={experienceOptions}
+          setOptions={setExperienceOptions}
           FormComponent={experienceForm}
       />
             <DynamicForm
@@ -184,7 +176,8 @@ const AddInfo = () => {
           information={educationInfo}
           setInformation={setEducationInfo}
           options={educationOptions}
-          FormComponent={EducationForm}
+          setOptions={setEducationOptions}
+          FormComponent={educationForm}
       />
     </Layout>
   );

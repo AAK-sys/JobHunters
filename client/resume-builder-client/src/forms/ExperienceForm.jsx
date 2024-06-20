@@ -4,13 +4,80 @@ function ExperienceForm({formData, handleChange}) {
 
     const [prepareForChange, setPrepareForChange] = useState(false);
 
+    const EXP_URL = formData.experienceId === 0 ? "http://localhost:8080/api/experience" : `http://localhost:8080/api/experience/${formData.experienceId}`
+
     const buttonClass = !prepareForChange 
     ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md" 
     : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
 
+    const addOrUpdate = () =>{
+        const token = localStorage.getItem("jwtToken");
+        const options = {
+            method: formData.experienceId === 0 ? "POST" : "PUT",
+            headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        };
+
+        fetch(`${EXP_URL}`, options)
+            .then((res) => {
+                const newOptions = [...options];
+                if(res.status == 201){
+                    alert(`your data has been Added`)
+                }else if(res.status == 204){
+                    alert(`your data has been Updated`)
+                }
+
+                return res.json();
+
+            }).then((data)=>{
+                if(data){
+                    alert(data);
+                }
+            }).catch((e) => {
+                alert(e);
+            })
+    }
+
+    const deleteExp = () => {
+        const token = localStorage.getItem("jwtToken");
+        const options = {
+            method: "Delete",
+            headers: {
+                Authorization: "Bearer " + token,
+            },
+        };
+
+        fetch(`${EXP_URL}`, options)
+            .then((res) => {
+                
+                if(res.status == 204){
+                    alert(`your data has been deleted`)
+                }
+
+                return res.json();
+
+            }).then((data)=>{
+                if(data){
+                    alert(data);
+                }
+            }).catch((e) => {
+                //alert(e); will revist with time.
+            })
+    }
+
     const submitRequest = (event) =>{
         event.preventDefault();
-        console.log(formData.experienceId == 0 ? "Add" : "edit", formData);
+        
+        const name = event.target.name;
+
+        if(name.includes("wildcard")){
+            addOrUpdate();
+        }else{
+            deleteExp();
+        }  
     }
 
     const registerChange = (event) =>{
@@ -104,16 +171,20 @@ function ExperienceForm({formData, handleChange}) {
             <div className={formData.experienceId != 0 ? "flex justify-between" : "flex justify-end"}>
 
             {formData.experienceId && <button 
+                    name="delete"
                     type="submit" 
+                    onClick={deleteExp}
                     className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
                 >
                     Delete
                 </button> || ''}
                 <button 
-                    type="submit" 
+                    type="submit"
+                    name="wildcard" 
+                    onClick={addOrUpdate}
                     className={buttonClass}
                 >
-                    {formData.role == '' ? "add new experience" : "confirm changes"}
+                    {formData.experienceId == 0 ? "add new experience" : "confirm changes"}
                 </button>
             </div>
         </form>

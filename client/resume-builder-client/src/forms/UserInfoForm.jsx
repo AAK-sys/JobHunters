@@ -4,15 +4,51 @@ function UserInfoForm({formData, setFormData}) {
 
     const [prepareForChange, setPrepareForChange] = useState(false);
 
+    const EXP_URL = `http://localhost:8080/api/userinfo/${formData.userInfoId}`;
+
     const buttonClass = !prepareForChange 
     ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md" 
     : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
 
+    const handelUpdate = (e) => {
+        
+        e.preventDefault();
+
+        const token = localStorage.getItem("jwtToken");
+        const options = {
+            method: "PUT",
+            headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        };
+
+        console.log(formData);
+
+        fetch(`${EXP_URL}`, options)
+            .then((res) => {
+                
+                if(res.status == 201 || res.status == 204){
+                    alert(`your data has been ${res.status == 201 ? "Added" : "updated"}`)
+                }
+
+                return res.json();
+
+            }).then((data)=>{
+                if(data){
+                    alert(data);
+                }
+            }).catch((e) => {
+                //alert(e);
+            })
+
+    }
 
     const handleChange = (e) => {
-        e.preventDefault();
         setPrepareForChange(true);
         const { name, value } = e.target;
+        console.log(name, value);
         setFormData((prevData) => ({
             ...prevData,
             [name]: value
@@ -33,7 +69,7 @@ function UserInfoForm({formData, setFormData}) {
                         <input 
                             type="text" 
                             name="name" 
-                            value={formData.fullName} 
+                            value={formData.name} 
                             onChange={handleChange}
                             className="px-3 py-2 border border-gray-300 rounded-md shadow-sm outline-none text-gray-900"
                         />
@@ -67,7 +103,7 @@ function UserInfoForm({formData, setFormData}) {
                                 type="text" 
                                 placeholder="linkedin.com/in/username" 
                                 name="url" 
-                                value={formData.website}
+                                value={formData.url}
                                 onChange={handleChange}
                                 className="px-3 py-2 border border-gray-300 rounded-md shadow-sm outline-none text-gray-900"
                             />
@@ -86,6 +122,7 @@ function UserInfoForm({formData, setFormData}) {
                 </div>
                 <div className="flex justify-end">
                 <button 
+                    onClick={handelUpdate}
                     type="submit" 
                     className={buttonClass}
                 >
