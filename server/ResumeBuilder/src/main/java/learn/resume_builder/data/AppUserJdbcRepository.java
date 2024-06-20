@@ -1,5 +1,6 @@
 package learn.resume_builder.data;
 
+import learn.resume_builder.data.mappers.RoleMapper;
 import learn.resume_builder.data.mappers.SecurityUserMapper;
 import learn.resume_builder.models.Role;
 import learn.resume_builder.models.User;
@@ -28,7 +29,13 @@ public class AppUserJdbcRepository implements AppUserRepository{
                 + "from user "
                 + "where username = ?;";
 
-        return jdbcTemplate.query(sql, new SecurityUserMapper(), username).stream().findFirst().orElse(null);
+        var user = jdbcTemplate.query(sql, new SecurityUserMapper(), username).stream().findFirst().orElse(null);
+
+        if(user!=null){
+            addRoles(user);
+        }
+
+        return user;
     }
 
 
@@ -69,5 +76,24 @@ public class AppUserJdbcRepository implements AppUserRepository{
 
         final String sql = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, user.getUserId(), 1);
+    }
+
+    private void addRoles(User user) {
+
+        //No need to give users Admin through the API we can set it in the database directly
+        //this can be changed later
+
+        final String sql = "select r.role_id, r.`name`"
+                + "from role r "
+                + "inner join user_role ur on ur.role_id = r.role_id "
+                + "where ur.user_id = ?;";
+
+                /*
+                + "inner join user_role ur on ur.role_id = r.skill_id "
+                + "inner join user u on u.user_id = ur.user_id "
+                + "where user_id = ?;";*/
+
+        var roles = jdbcTemplate.query(sql, new RoleMapper(), user.getUserId());
+        user.setRoles(roles);
     }
 }
