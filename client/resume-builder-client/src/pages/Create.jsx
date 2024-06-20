@@ -95,8 +95,8 @@ function Create() {
     };
 
     return (
-        <Layout className="flex flex-col md:flex-row md:justify-between">
-            <div className="w-full lg:ml-8 lg:mr-4 lg:my-0 mx-0 my-4 pb-16 md:pb-16 md:overflow-y-scroll">
+        <Layout className="flex flex-col lg:flex-row lg:justify-between">
+            <div className="w-full mx-auto pb-16 lg:overflow-y-scroll">
                 <h2 className="text-center text-2xl mt-8">
                     Select Info To Add To View Resume
                 </h2>
@@ -208,8 +208,8 @@ function Create() {
                     )}
                 </div>
             </div>
-            <div className="w-full md:ml-4 md:mr-8 md:my-0 mx-0 my-4 md:overflow-y-scroll">
-                <div className="flex flex-col gap-4 m-auto mt-4 lg:w-2/3 md:w-5/6 sm:w-5/6 border border-black p-1 rounded-md">
+            <div className="w-full mx-auto pb-10 lg:overflow-y-scroll">
+                <div className="flex flex-col gap-4 m-auto mt-4 w-5/6 lg:w-11/12 border border-black p-1 rounded-md">
                     <PDFViewer height="900px" width="100%">
                         <ResumeView
                             userInfo={userInfo}
@@ -236,7 +236,7 @@ function Create() {
                             loading ? (
                                 <>"Loading document..."</>
                             ) : (
-                                <div className="flex items-center border border-black rounded-lg p-2 w-max m-auto">
+                                <div className="flex items-center border border-black rounded-lg p-2 w-max m-auto mb-4">
                                     <FontAwesomeIcon icon={faDownload} />
                                     <span className="ml-2">
                                         Download Resume as PDF

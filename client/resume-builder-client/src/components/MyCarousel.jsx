@@ -2,6 +2,8 @@ import React from "react";
 import Carousel from "react-multi-carousel";
 import CarouselItem from "./CarouselItem";
 import "react-multi-carousel/lib/styles.css";
+import defaultResume from "../assets/DefaultResume.png";
+import comingSoon from "../assets/ComingSoon.jpg";
 
 function MyCarousel() {
     const responsive = {
@@ -22,7 +24,19 @@ function MyCarousel() {
         },
     };
 
-    const resumeTemplates = ["Default Template", "Coming Soon"];
+    const resumeTemplates = [
+        {
+            message: "Default Template",
+            img: defaultResume,
+            className: "default-template",
+        },
+        {
+            message: "Coming Soon",
+            img: comingSoon,
+            className: "coming-soon-template",
+        },
+    ];
+
     return (
         <Carousel
             responsive={responsive}
@@ -36,8 +50,15 @@ function MyCarousel() {
             partialVisbiles={true}
             className="my-8 pb-10"
         >
-            {resumeTemplates.map((message, i) => {
-                return <CarouselItem key={i} message={message} img={""} />;
+            {resumeTemplates.map((item, i) => {
+                return (
+                    <CarouselItem
+                        key={i}
+                        message={item.message}
+                        img={item.img}
+                        className={item.className}
+                    />
+                );
             })}
         </Carousel>
     );

@@ -33,6 +33,7 @@ h4 {
 
 .nav-item {
     padding: 1% 3%;
+    border: solid 1px #dddddd;
     border-radius: 0.5rem;
     transition: 300ms;
 }
