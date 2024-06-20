@@ -70,29 +70,29 @@
 
 -   Continuation of Home Page **_D2 (Expected Time: 1hr, Actual Time: 1hr)_**
 
-    -   [ ] Template Carousel
-    -   [ ] Templates to build resumes off of - Defaulted to 1 Resume Template for now
+    -   [x] Template Carousel
+    -   [x] Templates to build resumes off of - Defaulted to 1 Resume Template for now
 
 -   [ ] Add User Info Page
     -   [ ] Add Summary Form - **_D2 (Expected Time: 0.5hr)_**
     -   [ ] Add Education Form - **_D2 (Expected Time: 1.5hr)_**
     -   [ ] Add Experience Form - **_D2 (Expected Time: 1.5hr)_**
     -   [ ] Add Skills Form - **_D2 (Expected Time: 1.5hr)_**
--   [ ] Template Builder Page
-    -   [ ] First Half - **_Both (Expected Time: 2hrs)_**
-        -   [ ] Select Summary to add
-        -   [ ] Select Education to add
-        -   [ ] Select Experience to add
-        -   [ ] Select Skills to Add
+-   [x] Template Builder Page
+    -   [x] First Half - **_Both (Expected Time: 2hrs, Actual Time: 3hrs)_**
+        -   [x] Select Summary to add
+        -   [x] Select Education to add
+        -   [x] Select Experience to add
+        -   [x] Select Skills to Add
 
 **Wednesday**
 
 -   Continuation of Template Builder Page
 
-    -   [ ] Second Half - **_Both (Expected Time: 2hrs)_**
-        -   [ ] Build Resume Button
-        -   [ ] Download Resume as PDF Button
-        -   [ ] Show Resume Preview Button
+    -   [x] Second Half - **_Both (Expected Time: 2hrs, Actual Time: 4hrs)_**
+        -   [x] Build Resume Button
+        -   [x] Download Resume as PDF Button
+        -   [x] Show Resume Preview Button
 
--   [ ] View All Users Page (for admin only) - **_D2 (Expected Time: 0.5hr)_**
-    -   [ ] Show All Users
+-   [x] View All Users Page (for admin only) - **_D2 (Expected Time: 0.5hr, Actual Time: 1hr)_**
+    -   [x] Show All Users
