@@ -141,10 +141,10 @@ const AddInfo = () => {
   }, [user]);
 
   const defaultUserInfo = {
-    fullName: '',
+    name: '',
     email: '',
     phone: '',
-    website: '',
+    url: '',
     location: '',
     userId: user.userId
   };
