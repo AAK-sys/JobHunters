@@ -1,10 +1,5 @@
-import { useState } from "react";
-import { jwtDecode } from "jwt-decode";
-
 function EducationForm({ formData, setFormData, handleChange, setOptions, setSelected, information, setInformation }) {
     
-    const [prepareForChange, setPrepareForChange] = useState(false);
-
             const defaultEducation = {
             educationId: 0,
             universityName: "",
@@ -16,10 +11,6 @@ function EducationForm({ formData, setFormData, handleChange, setOptions, setSel
             description: "",
             userId: formData.userId,
         };
-
-    const buttonClass = !prepareForChange
-        ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
-        : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
 
         const handelAdd =  () => {
         
@@ -108,7 +99,6 @@ function EducationForm({ formData, setFormData, handleChange, setOptions, setSel
 
     const registerChange = (event) => {
         handleChange(event);
-        setPrepareForChange(true);
     };
 
     const handelSubmit = (e) => {
@@ -321,12 +311,12 @@ function EducationForm({ formData, setFormData, handleChange, setOptions, setSel
                         <button
                             type="button"
                             onClick={handelDelete}
-                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
+                            className="px-4 py-2 rounded-md deleteBtn"
                         >
                             Delete
                         </button>
                     ))}
-                    <button type="submit" className={buttonClass}>
+                    <button type="submit" className="px-4 py-2 rounded-md submitBtn">
                         {formData.educationId === 0
                             ? "add new education"
                             : "confirm changes"}

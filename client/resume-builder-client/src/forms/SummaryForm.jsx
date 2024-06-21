@@ -1,7 +1,4 @@
-import { useState } from "react";
-
 function SummaryForm({ formData, setFormData, handleChange, setOptions, setSelected, information, setInformation }) {
-    const [prepareForChange, setPrepareForChange] = useState(false);
 
     const defaultSummary = {
         summaryId: 0,
@@ -15,13 +12,8 @@ function SummaryForm({ formData, setFormData, handleChange, setOptions, setSelec
             ? "http://localhost:8080/api/summary"
             : `http://localhost:8080/api/summary/${formData.summaryId}`;
 
-    const buttonClass = !prepareForChange
-        ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
-        : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
-
     const registerChange = (event) => {
         handleChange(event);
-        setPrepareForChange(true);
     };
 
     const addOrUpdate = (e) => {
@@ -177,7 +169,7 @@ function SummaryForm({ formData, setFormData, handleChange, setOptions, setSelec
                             type="button"
                             name="delete"
                             onClick={deleteExp}
-                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
+                            className="px-4 py-2 rounded-md deleteBtn"
                         >
                             Delete
                         </button>
@@ -187,7 +179,7 @@ function SummaryForm({ formData, setFormData, handleChange, setOptions, setSelec
                         type="submit"
                         name="wildcard"
                         onClick={addOrUpdate}
-                        className={buttonClass}
+                        className="px-4 py-2 rounded-md submitBtn"
                     >
                         {formData.summaryId === 0
                             ? "add new summary"

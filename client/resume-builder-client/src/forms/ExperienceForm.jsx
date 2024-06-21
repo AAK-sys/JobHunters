@@ -1,8 +1,4 @@
-import { useState } from "react";
-
 function ExperienceForm({ formData, setFormData, handleChange, setOptions, setSelected, information, setInformation }) {
-    
-    const [prepareForChange, setPrepareForChange] = useState(false);
     
     const defaultExperience = {
         experienceId: 0,
@@ -19,10 +15,6 @@ function ExperienceForm({ formData, setFormData, handleChange, setOptions, setSe
         formData.experienceId === 0
             ? "http://localhost:8080/api/experience"
             : `http://localhost:8080/api/experience/${formData.experienceId}`;
-
-    const buttonClass = !prepareForChange
-        ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
-        : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
 
     const addOrUpdate = (e) => {
         e.preventDefault();
@@ -125,7 +117,6 @@ function ExperienceForm({ formData, setFormData, handleChange, setOptions, setSe
 
     const registerChange = (event) => {
         handleChange(event);
-        setPrepareForChange(true);
     };
 
     return (
@@ -256,7 +247,7 @@ function ExperienceForm({ formData, setFormData, handleChange, setOptions, setSe
                             name="delete"
                             type="button"
                             onClick={deleteExp}
-                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
+                            className="px-4 py-2 rounded-md deleteBtn"
                         >
                             Delete
                         </button>
@@ -265,7 +256,7 @@ function ExperienceForm({ formData, setFormData, handleChange, setOptions, setSe
                         type="submit"
                         name="addOrupdate"
                         onClick={addOrUpdate}
-                        className={buttonClass}
+                        className= "px-4 py-2 rounded-md submitBtn"
                     >
                         {formData.experienceId === 0
                             ? "add new experience"

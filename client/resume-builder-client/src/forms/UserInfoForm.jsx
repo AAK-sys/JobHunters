@@ -1,13 +1,6 @@
-import { useState } from "react";
-
 function UserInfoForm({ formData, setFormData }) {
-    const [prepareForChange, setPrepareForChange] = useState(false);
 
     const EXP_URL = `http://localhost:8080/api/userinfo/${formData.userInfoId}`;
-
-    const buttonClass = !prepareForChange
-        ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
-        : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
 
     const handelAdd =  () => {
         
@@ -78,7 +71,6 @@ function UserInfoForm({ formData, setFormData }) {
     };
 
     const handleChange = (e) => {
-        setPrepareForChange(true);
         const { name, value } = e.target;
         setFormData((prevData) => ({
             ...prevData,
@@ -175,7 +167,7 @@ function UserInfoForm({ formData, setFormData }) {
                 <div className="flex justify-end">
                     <button
                         type="submit"
-                        className={buttonClass}
+                        className="px-4 py-2 rounded-md submitBtn"
                     >
                         Save
                     </button>
