@@ -1,20 +1,19 @@
-import { useState } from "react";
+function SummaryForm({ formData, setFormData, handleChange, setOptions, setSelected, information, setInformation }) {
 
-function SummaryForm({ formData, handleChange, options, setOptions }) {
-    const [prepareForChange, setPrepareForChange] = useState(false);
+    const defaultSummary = {
+        summaryId: 0,
+        displayName: "",
+        description: "",
+        userId: formData.userId
+    };
 
     const URL =
         formData.summaryId === 0
             ? "http://localhost:8080/api/summary"
             : `http://localhost:8080/api/summary/${formData.summaryId}`;
 
-    const buttonClass = !prepareForChange
-        ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
-        : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
-
     const registerChange = (event) => {
         handleChange(event);
-        setPrepareForChange(true);
     };
 
     const addOrUpdate = (e) => {
@@ -31,10 +30,13 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
 
         fetch(`${URL}`, options)
             .then((res) => {
-                console.log(res.status);
                 if (res.status === 204) {
+                    alert("your data has been updated")
                     return null;
-                } else if (res.status === 201 || res.status === 400) {
+                } else if (res.status === 201) {
+                    alert("your data has been added");
+                    return res.json();
+                }else if(res.status === 400){
                     return res.json();
                 } else {
                     return Promise.reject(
@@ -43,24 +45,41 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                 }
             })
             .then((data) => {
-                console.log(data);
-                if (!data) {
-                    alert("Updated Form");
-                } else if (data.summaryId) {
-                    alert("Added Summary");
-                    // setOptions([...options, data]);
-                } else {
-                    alert("Errors");
+                if (data && !data.summaryId) {
+                    alert(data); //an error occured
+                    return;
+                }else if(data){ //add
+                    setOptions(prevOptions => {
+                        const newOption = { value: data.summaryId, label: data.displayName };
+                        const lastOption = prevOptions[prevOptions.length - 1];
+                        return [...prevOptions.slice(0, -1), newOption, lastOption];
+                    });
+                    setInformation(prevInfo => {
+                        const entries = Object.entries(prevInfo);
+                        const lastEntry = entries.pop();
+                        const newEntries = [...entries, [data.summaryId, data], lastEntry];
+                        return Object.fromEntries(newEntries);
+                    })
+                    const newInformation = information;
+                    newInformation[0] = defaultSummary;
+                    setFormData(defaultSummary);
+                    setInformation(newInformation);
                 }
-                // alert(data, "hello from data");
-                // console.log(data);
+                    
+
             })
             .catch((e) => {
-                //alert(e);
+
             });
     };
 
     const deleteExp = (e) => {
+        const id = formData.summaryId;
+        const goAhead = window.confirm(`permenatly delete ${formData.displayName}?`);
+        if(!goAhead){
+            return;
+        }
+
         e.preventDefault();
         const token = localStorage.getItem("jwtToken");
         const options = {
@@ -73,7 +92,25 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
         fetch(`${URL}`, options)
             .then((res) => {
                 if (res.status === 204) {
-                    alert(`your data has been deleted`);
+                    setOptions(prevOptions => {
+                        // Filter out the option with the specified id
+                        const updatedOptions = prevOptions.filter(option => option.value !== id);
+                        return updatedOptions;
+                    });
+                    
+                    setInformation(prevInfo => {
+                        // Filter out the entry with the specified id
+                        const newEntries = Object.fromEntries(
+                            Object.entries(prevInfo).filter(([key]) => key !== id)
+                        );
+                        return newEntries;
+                    });
+                    
+                    // Reset the form and set additional state if needed
+                    setSelected( prevSelected => {
+                        prevSelected.value=-1;
+                        prevSelected.label = 'Select an option';
+                    });
                 }
 
                 return res.json();
@@ -84,7 +121,6 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                 }
             })
             .catch((e) => {
-                //alert(e); will revist with time.
             });
     };
 
@@ -102,7 +138,7 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                         type="text"
                         id="displayName"
                         name="displayName"
-                        value={formData.displayName}
+                        value={formData.displayName || ''}
                         onChange={registerChange}
                         placeholder="Enter display name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -119,7 +155,7 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                     <textarea
                         id="description"
                         name="description"
-                        value={formData.description}
+                        value={formData.description || ''}
                         onChange={registerChange}
                         placeholder="who are you?"
                         rows="3"
@@ -139,7 +175,7 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                             type="button"
                             name="delete"
                             onClick={deleteExp}
-                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
+                            className="px-4 py-2 rounded-md deleteBtn"
                         >
                             Delete
                         </button>
@@ -149,7 +185,7 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                         type="submit"
                         name="wildcard"
                         onClick={addOrUpdate}
-                        className={buttonClass}
+                        className="px-4 py-2 rounded-md submitBtn"
                     >
                         {formData.summaryId === 0
                             ? "add new summary"

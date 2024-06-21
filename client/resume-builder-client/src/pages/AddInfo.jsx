@@ -53,7 +53,6 @@ const AddInfo = () => {
                 setSummary(data.summaries || []);
                 setExperience(data.experiences || []);
                 setEducation(data.educations || []);
-                setUserInfo(data.userInfo || defaultUserInfo);
             });
     }, []);
 
@@ -107,6 +106,7 @@ const AddInfo = () => {
         };
 
         const defaultEducation = {
+            educationId: 0,
             universityName: "",
             degree: "",
             major: "",
@@ -116,6 +116,16 @@ const AddInfo = () => {
             description: "",
             userId: user.userId,
         };
+
+        const defaultUserInfo = {
+          userInfoId: 0,
+          fullName: "",
+          email: "",
+          phone: "",
+          website: "",
+          location: "",
+          userId: user.userId,
+      };
 
         educationMap[0] = defaultEducation;
         experienceMap[0] = defaultExperience;
@@ -140,49 +150,49 @@ const AddInfo = () => {
         setExperienceOptions(experienceOptionsArray);
         setEducationInfo(educationMap);
         setEducationOptions(educationOptionsArray);
-        console.log(user);
+        setUserInfo(user.userInfo || defaultUserInfo);
     }, [user]);
-
-    const defaultUserInfo = {
-        fullName: "",
-        email: "",
-        phone: "",
-        website: "",
-        location: "",
-        userId: user.userId,
-    };
 
     const summaryForm = SummaryForm;
     const experienceForm = ExperienceForm;
     const educationForm = EducationForm;
-
     return (
         <Layout className="flex flex-col">
-            <UserInfoForm formData={userInfo} setFormData={setUserInfo} />
-            <DynamicForm
-                title={"Summary"}
-                information={summaryInfo}
-                setInformation={setSummaryInfo}
-                options={summaryOptions}
-                setOptions={setSummaryOptions}
-                FormComponent={summaryForm}
-            />
-            <DynamicForm
-                title={"Experience"}
-                information={experienceInfo}
-                setInformation={setExperienceInfo}
-                options={experienceOptions}
-                setOptions={setExperienceOptions}
-                FormComponent={experienceForm}
-            />
-            {/* <DynamicForm
-                title={"Education"}
-                information={educationInfo}
-                setInformation={setEducationInfo}
-                options={educationOptions}
-                setOptions={setEducationOptions}
-                FormComponent={educationForm}
-            /> */}
+<div className="flex flex-wrap justify-between">
+    <div className="w-full md:w-1/2 lg:w-1/4 p-2">
+        <UserInfoForm formData={userInfo} setFormData={setUserInfo} />
+    </div>
+    <div className="w-full md:w-1/2 lg:w-1/4 p-2">
+        <DynamicForm
+            title={"Summary"}
+            information={summaryInfo}
+            setInformation={setSummaryInfo}
+            options={summaryOptions}
+            setOptions={setSummaryOptions}
+            FormComponent={summaryForm}
+        />
+    </div>
+    <div className="w-full md:w-1/2 lg:w-1/4 p-2">
+        <DynamicForm
+            title={"Experience"}
+            information={experienceInfo}
+            setInformation={setExperienceInfo}
+            options={experienceOptions}
+            setOptions={setExperienceOptions}
+            FormComponent={experienceForm}
+        />
+    </div>
+    <div className="w-full md:w-1/2 lg:w-1/4 p-2 md:ml-auto">
+        <DynamicForm
+            title={"Education"}
+            information={educationInfo}
+            setInformation={setEducationInfo}
+            options={educationOptions}
+            setOptions={setEducationOptions}
+            FormComponent={educationForm}
+        />
+    </div>
+</div>
         </Layout>
     );
 };

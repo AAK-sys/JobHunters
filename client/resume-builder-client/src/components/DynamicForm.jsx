@@ -13,12 +13,10 @@ const DynamicForm = ({
 
     const handleChange = (selectedOption) => {
         setSelectedOption(selectedOption); // Update selected option
-        console.log("from option changed");
     };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log(information);
         setInformation({
             ...information,
             [selectedOption.value]: {
@@ -29,12 +27,12 @@ const DynamicForm = ({
     };
 
     return (
-        <div className="p-2 m-3 rounded-lg w-[45%] shadow">
+        <div className="p-2 m-3 rounded-lg shadow">
             <div className="flex justify-between mb-2 pt-2">
                 <h2 className="text-xl font-semibold text-gray-700 mr-3">
                     {title}
                 </h2>
-                <DropDown options={options} onSelect={handleChange} />
+                <DropDown options={options} onSelect={handleChange} selectedOption={selectedOption} />
             </div>
             <div className="mt-4">
                 <div className="rounded-xl text-lg bg-white">
@@ -44,6 +42,10 @@ const DynamicForm = ({
                             handleChange={handleInputChange}
                             options={options}
                             setOptions={setOptions}
+                            setInformation = {setInformation}
+                            information = {information}
+                            setSelected={setSelectedOption}
+                            onSelectChange={handleChange}
                         />
                     )}
                 </div>

@@ -56,11 +56,11 @@ h4 {
     background-color: #c9e4de;
 }
 
-.education-button {
+.education-button, .submitBtn {
     background-color: #c6def1;
 }
 
-.experience-button {
+.experience-button, .deleteBtn {
     background-color: #dbcdf0;
 }
 
@@ -70,4 +70,6 @@ h4 {
 
 .sign-up-button {
     background-color: #f7d9c4;
+
 }
+

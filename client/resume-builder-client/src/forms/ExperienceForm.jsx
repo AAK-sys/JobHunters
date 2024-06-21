@@ -1,20 +1,25 @@
-import { useState } from "react";
-
-function ExperienceForm({ formData, handleChange }) {
-    const [prepareForChange, setPrepareForChange] = useState(false);
+function ExperienceForm({ formData, setFormData, handleChange, setOptions, setSelected, information, setInformation }) {
+    
+    const defaultExperience = {
+        experienceId: 0,
+        displayName: "",
+        company: "",
+        role: "",
+        startDate: "",
+        endDate: "",
+        description: "",
+        userId: formData.userId
+    }
 
     const EXP_URL =
         formData.experienceId === 0
             ? "http://localhost:8080/api/experience"
             : `http://localhost:8080/api/experience/${formData.experienceId}`;
 
-    const buttonClass = !prepareForChange
-        ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
-        : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
-
-    const addOrUpdate = () => {
+    const addOrUpdate = (e) => {
+        e.preventDefault();
         const token = localStorage.getItem("jwtToken");
-        const options = {
+        const init = {
             method: formData.experienceId === 0 ? "POST" : "PUT",
             headers: {
                 Authorization: "Bearer " + token,
@@ -23,7 +28,7 @@ function ExperienceForm({ formData, handleChange }) {
             body: JSON.stringify(formData),
         };
 
-        fetch(`${EXP_URL}`, options)
+        fetch(`${EXP_URL}`, init)
             .then((res) => {
                 if (res.status === 201) {
                     alert(`your data has been Added`);
@@ -34,16 +39,36 @@ function ExperienceForm({ formData, handleChange }) {
                 return res.json();
             })
             .then((data) => {
-                if (data) {
+                if (data && !data.experienceId) {
                     alert(data);
+                }else if(data){ //add
+                    setOptions(prevOptions => {
+                        const newOption = { value: data.experienceId, label: data.displayName };
+                        const lastOption = prevOptions[prevOptions.length - 1];
+                        return [...prevOptions.slice(0, -1), newOption, lastOption];
+                    });
+                    setInformation(prevInfo => {
+                        const entries = Object.entries(prevInfo);
+                        const lastEntry = entries.pop();
+                        const newEntries = [...entries, [data.experienceId, data], lastEntry];
+                        return Object.fromEntries(newEntries);
+                    })
+                    const newInformation = information;
+                    newInformation[0] = defaultExperience;
+                    setFormData(defaultExperience);
+                    setInformation(newInformation);
                 }
             })
             .catch((e) => {
-                alert(e);
             });
     };
 
     const deleteExp = () => {
+        const id = formData.experienceId;
+        const goAhead = window.confirm(`permenatly delete ${formData.displayName}?`);
+        if(!goAhead){
+            return;
+        }
         const token = localStorage.getItem("jwtToken");
         const options = {
             method: "Delete",
@@ -55,7 +80,26 @@ function ExperienceForm({ formData, handleChange }) {
         fetch(`${EXP_URL}`, options)
             .then((res) => {
                 if (res.status === 204) {
-                    alert(`your data has been deleted`);
+                    setOptions(prevOptions => {
+                        // Filter out the option with the specified id
+                        const updatedOptions = prevOptions.filter(option => option.value !== id);
+                        return updatedOptions;
+                    });
+                    
+                    setInformation(prevInfo => {
+                        // Filter out the entry with the specified id
+                        const newEntries = Object.fromEntries(
+                            Object.entries(prevInfo).filter(([key]) => key !== id)
+                        );
+                        return newEntries;
+                    });
+                    
+                    // Reset the form and set additional state if needed
+                    setSelected( prevSelected => {
+                        prevSelected.value=-1;
+                        prevSelected.label = 'Select an option';
+                    });
+
                 }
 
                 return res.json();
@@ -63,6 +107,7 @@ function ExperienceForm({ formData, handleChange }) {
             .then((data) => {
                 if (data) {
                     alert(data);
+                }else if(!data){
                 }
             })
             .catch((e) => {
@@ -72,7 +117,6 @@ function ExperienceForm({ formData, handleChange }) {
 
     const registerChange = (event) => {
         handleChange(event);
-        setPrepareForChange(true);
     };
 
     return (
@@ -89,7 +133,7 @@ function ExperienceForm({ formData, handleChange }) {
                         type="text"
                         id="displayName"
                         name="displayName"
-                        value={formData.displayName}
+                        value={formData.displayName || ''}
                         onChange={registerChange}
                         placeholder="Enter display name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -107,7 +151,7 @@ function ExperienceForm({ formData, handleChange }) {
                         type="text"
                         id="companyName"
                         name="companyName"
-                        value={formData.companyName}
+                        value={formData.companyName || ''}
                         onChange={registerChange}
                         placeholder="Enter company name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -125,7 +169,7 @@ function ExperienceForm({ formData, handleChange }) {
                         type="text"
                         id="role"
                         name="role"
-                        value={formData.role}
+                        value={formData.role || ''}
                         onChange={registerChange}
                         placeholder="Enter your role"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -144,7 +188,7 @@ function ExperienceForm({ formData, handleChange }) {
                             type="date"
                             id="startDate"
                             name="startDate"
-                            value={formData.startDate}
+                            value={formData.startDate || ''}
                             onChange={registerChange}
                             placeholder="MM/YYYY"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -161,7 +205,7 @@ function ExperienceForm({ formData, handleChange }) {
                             type="date"
                             id="endDate"
                             name="endDate"
-                            value={formData.endDate}
+                            value={formData.endDate || ''}
                             onChange={registerChange}
                             placeholder="MM/YYYY"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -203,16 +247,16 @@ function ExperienceForm({ formData, handleChange }) {
                             name="delete"
                             type="button"
                             onClick={deleteExp}
-                            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
+                            className="px-4 py-2 rounded-md deleteBtn"
                         >
                             Delete
                         </button>
                     )}
                     <button
                         type="submit"
-                        name="wildcard"
+                        name="addOrupdate"
                         onClick={addOrUpdate}
-                        className={buttonClass}
+                        className= "px-4 py-2 rounded-md submitBtn"
                     >
                         {formData.experienceId === 0
                             ? "add new experience"
