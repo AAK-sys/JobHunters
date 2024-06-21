@@ -142,7 +142,6 @@ begin
     values
         (1, 1),
         (2, 1),
-        (3, 1),
         (3, 2);
 
     insert into user_info(full_name, email, phone, website, `location`, user_id)
@@ -159,15 +158,16 @@ begin
 
     insert into education(university_name, degree, major, gpa, `start_date`, `end_date`, `description`, user_id)
     values
-        ("Hunter College", "Bachelor of Arts", "Computer Science", 3.90, '2020-08-01', null, null, 1),
-        ("Harvard University", "Bachelor of Science", "Business Communications", 3.0, '2015-08-01', '2020-05-01', null, 2),
-        ("Cornell University", "Bachelor of Science", "Economics", 4.0, '2022-08-01', null, null, 3);
+        ("Hunter College", "Bachelor of Arts", "Computer Science", 3.90, '2020-08-01', null, 
+        "Testing Description Testing Description Testing Description Testing Description Testing Description Testing Description Testing Description", 1),
+        ("Harvard University", "Bachelor of Science", "Business Communications", 3.0, '2015-08-01', '2020-05-01', "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", 2),
+        ("Cornell University", "Bachelor of Science", "Economics", 4.0, '2022-08-01', null, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", 3);
 
     insert into experience(company_name, `role`, display_name, `start_date`, `end_date`, `description`, user_id)
     values
-        ("Google", "Software Engineer Intern", "Google Intern", "2020-12-01", "2021-02-01", null, 1),
-        ("Google", "Full Stack Engineer", "Google Full Stack", "2024-06-01", null, null, 1),
-        ("Amazon", "Software Engineer", "Amazon Cloud Engineer", "2020-06-01", "2022-08-01", null, 2),
+        ("Google", "Software Engineer Intern", "Google Intern", "2020-12-01", "2021-02-01", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", 1),
+        ("Google", "Full Stack Engineer", "Google Full Stack", "2024-06-01", null, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", 1),
+        ("Amazon", "Software Engineer", "Amazon Cloud Engineer", "2020-06-01", "2022-08-01", "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.", 2),
         ("Discord", "Project Manager", "Discord PM", "2023-02-01", null, null, 2);
 
     insert into skill(`name`)

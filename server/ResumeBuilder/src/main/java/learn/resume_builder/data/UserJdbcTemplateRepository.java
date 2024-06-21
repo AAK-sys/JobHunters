@@ -1,5 +1,6 @@
 package learn.resume_builder.data;
 
+import learn.resume_builder.models.Role;
 import learn.resume_builder.models.User;
 import learn.resume_builder.data.mappers.*;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,7 +23,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        final String sql = "select user_id, email, password_hash, username, disabled "
+        final String sql = "select user_id, email, username, disabled "
                 + "from user limit 1000;";
 
         return jdbcTemplate.query(sql, new UserMapper());
@@ -31,7 +32,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
     @Override
     @Transactional
     public User findById(int userId) {
-        final String sql = "select user_id, email, password_hash, username, disabled "
+        final String sql = "select user_id, email, username, disabled "
                 + "from user "
                 + "where user_id = ?;";
 
@@ -47,7 +48,6 @@ public class UserJdbcTemplateRepository implements UserRepository {
         addSummaries(user);
         addEducations(user);
         addExperiences(user);
-        addSkills(user);
         // To implement if needed: user.setRoles(getRolesByUserId(userId))
         addRoles(user);
         return user;
@@ -55,7 +55,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
     @Override
     public User findByUsername(String s) {
-        final String sql = "select user_id, email, password_hash, username, disabled "
+        final String sql = "select user_id, email, username, disabled "
                 + "from user "
                 + "where username = ?;";
 
@@ -71,22 +71,20 @@ public class UserJdbcTemplateRepository implements UserRepository {
         addSummaries(user);
         addEducations(user);
         addExperiences(user);
-        addSkills(user);
         // To implement if needed: user.setRoles(getRolesByUserId(userId))
         addRoles(user);
         return user;
     }
 
-
+    @Deprecated
     @Override
     public User add(User user) {
-        final String sql = "insert into user (email, password_hash, username) "
+        final String sql = "insert into user (email, username) "
                 + "values (?,?,?);";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int rowsAffected = jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, user.getEmail());
-            ps.setString(2, user.getPassword());
             ps.setString(3, user.getUsername());
             return ps;
         }, keyHolder);
@@ -97,6 +95,7 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
         user.setUserId(keyHolder.getKey().intValue());
         // To implement if needed: updateRoles
+        addUserAsUser(user);
         return user;
     }
 
@@ -160,16 +159,13 @@ public class UserJdbcTemplateRepository implements UserRepository {
         user.setExperiences(experiences);
     }
 
-    private void addSkills(User user) {
-        final String sql = "select s.skill_id, s.`name` "
-                + "from skill s "
-                + "inner join user_skill us on us.skill_id = s.skill_id "
-                + "inner join user u on u.user_id = us.user_id "
-                + "where u.user_id = ?;";
+    private void addUserAsUser(User user) {
+        user.getRoles().add(new Role()); // adding the default user Role
 
-        var skills = jdbcTemplate.query(sql, new SkillMapper(), user.getUserId());
-        user.setSkills(skills);
+        final String sql = "INSERT INTO user_role (user_id, role_id) VALUES (?, ?)";
+        int userRole = jdbcTemplate.update(sql, user.getUserId(), 1);
     }
+
 
     private void addRoles(User user) {
 
@@ -188,6 +184,5 @@ public class UserJdbcTemplateRepository implements UserRepository {
 
         var roles = jdbcTemplate.query(sql, new RoleMapper(), user.getUserId());
         user.setRoles(roles);
-
     }
 }

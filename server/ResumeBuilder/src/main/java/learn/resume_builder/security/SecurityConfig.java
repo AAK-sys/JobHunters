@@ -1,5 +1,6 @@
 package learn.resume_builder.security;
 
+import learn.resume_builder.data.AppUserJdbcRepository;
 import learn.resume_builder.data.UserJdbcTemplateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,28 +17,34 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtConverter converter;
-    private UserJdbcTemplateRepository userRepository;
+    private AppUserJdbcRepository userRepository;
 
     @Autowired
-    public SecurityConfig(JwtConverter converter, UserJdbcTemplateRepository userRepository) {
+    public SecurityConfig(JwtConverter converter, AppUserJdbcRepository userRepository) {
         this.converter = converter;
         this.userRepository = userRepository;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        System.out.println(http.headers().toString());
+        http.csrf().disable();
+        http.cors();
+        http
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .anyRequest().authenticated()
+//                .antMatchers("/api/user/all").hasRole("ADMIN")
+                .anyRequest().permitAll()
                 .and()
-                .addFilter(new JwtRequestFilter(authenticationManagerBean(), converter))
+                .addFilter(new JwtRequestFilter(authenticationManager(), converter))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
@@ -57,8 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 
     @Bean
@@ -69,6 +76,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:3000")
+                        .allowedMethods("*");
+            }
+        };
     }
 }
 
