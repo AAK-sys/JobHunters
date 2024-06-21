@@ -178,7 +178,7 @@ function Create() {
                                     objValue={selectExperiences}
                                     handleChange={handleExperienceChange}
                                     objArray={experiences}
-                                    label="companyName"
+                                    label="displayName"
                                     idString="experienceId"
                                 />
                             )}

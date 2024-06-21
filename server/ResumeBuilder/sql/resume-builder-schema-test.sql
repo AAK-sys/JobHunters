@@ -142,7 +142,6 @@ begin
     values
         (1, 1),
         (2, 1),
-        (3, 1),
         (3, 2);
 
     insert into user_info(full_name, email, phone, website, `location`, user_id)

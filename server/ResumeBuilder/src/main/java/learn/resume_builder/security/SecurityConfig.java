@@ -35,16 +35,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        System.out.println(http.headers().toString());
         http.csrf().disable();
         http.cors();
         http
                 .authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
-                .antMatchers("/api/user/all").hasRole("ADMIN")
+//                .antMatchers("/api/user/all").hasRole("ADMIN")
                 .anyRequest().permitAll()
-//                .anyRequest().authenticated()
                 .and()
-                .addFilter(new JwtRequestFilter(authenticationManagerBean(), converter))
+                .addFilter(new JwtRequestFilter(authenticationManager(), converter))
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
@@ -64,8 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
+    public AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
     }
 
     @Bean
