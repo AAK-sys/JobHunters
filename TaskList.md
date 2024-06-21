@@ -7,7 +7,7 @@
 
 ### General
 
--   [ ] Research - **_Both (Expected Time: 2hrs)_**
+-   [x] Research - **_Both (Expected Time: 2hrs, Actual Time: ~4hrs)_**
 
 ### Back End (Java)
 
@@ -52,7 +52,6 @@
 -   [x] Add Authentication With JWT - **_D2 (Expected Time: 1hr)_**
 -   [x] Build Controllers - **_D2 (Expected Time: 2hrs)_**
     -   [x] Build Controllers for model
-    -   [ ] Create http test files
 
 ### Front End (React)
 
@@ -73,11 +72,11 @@
     -   [x] Template Carousel
     -   [x] Templates to build resumes off of - Defaulted to 1 Resume Template for now
 
--   [ ] Add User Info Page
-    -   [ ] Add Summary Form - **_D2 (Expected Time: 0.5hr)_**
-    -   [ ] Add Education Form - **_D2 (Expected Time: 1.5hr)_**
-    -   [ ] Add Experience Form - **_D2 (Expected Time: 1.5hr)_**
-    -   [ ] Add Skills Form - **_D2 (Expected Time: 1.5hr)_**
+-   [x] Add User Info Page
+    -   [x] Add Summary Form - **_D2 (Expected Time: 0.5hr, Actual Time: 1hr)_**
+    -   [x] Add Education Form - **_D2 (Expected Time: 1.5hr, Actual Time: 2.5hrs)_**
+    -   [x] Add Experience Form - **_D2 (Expected Time: 1.5hr, Actual Time: 2.5hrs)_**
+    -   [x] Add Skills Form - **_D2 (Expected Time: 1.5hr, Actual Time: 2.5hrs)_**
 -   [x] Template Builder Page
     -   [x] First Half - **_Both (Expected Time: 2hrs, Actual Time: 3hrs)_**
         -   [x] Select Summary to add
