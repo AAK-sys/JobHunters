@@ -54,7 +54,7 @@ const AddInfo = () => {
                 setExperience(data.experiences || []);
                 setEducation(data.educations || []);
             });
-    }, [navigate]);
+    }, []);
 
     useEffect(() => {
         const summaryMap = summary.reduce((acc, s) => {
