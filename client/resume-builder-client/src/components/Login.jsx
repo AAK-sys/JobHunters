@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 
-const AUTH_URL = "http://localhost:8080/api/auth";
+const AUTH_URL = "http://localhost:8080/api/user";
 
 const DEFAULT_CREDENTIALS = {
     username: "",
@@ -33,18 +33,23 @@ function Login() {
             },
             body: JSON.stringify(credentials),
         };
-        fetch(`${AUTH_URL}/login`, options)
+        fetch(`${AUTH_URL}/authenticate`, options)
             .then((res) => {
                 if (res.status === 200) {
                     return res.json();
+                } else if (res.status === 403) {
+                    return null;
                 } else {
-                    setError("The credentials were invalid.");
+                    return Promise.reject(
+                        `Unexpected status code: ${res.status}`
+                    );
                 }
             })
             .then((data) => {
-                if (data) {
+                if (!data) {
+                    setError("The credentials were invalid.");
+                } else {
                     localStorage.setItem("jwtToken", data.jwt_token);
-                    // SET USER CONTEXT
                     navigate("/home");
                 }
             });

@@ -1,5 +1,6 @@
 package learn.resume_builder.domain;
 
+import learn.resume_builder.data.AppUserRepository;
 import learn.resume_builder.data.EducationRepository;
 import learn.resume_builder.data.UserRepository;
 import learn.resume_builder.models.Education;
@@ -14,9 +15,9 @@ import java.util.Set;
 @Service
 public class EducationService {
     private final EducationRepository repository;
-    private final UserRepository userRepository;
+    private final AppUserRepository userRepository;
 
-    public EducationService(EducationRepository repository, UserRepository userRepository) {
+    public EducationService(EducationRepository repository, AppUserRepository userRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
     }

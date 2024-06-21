@@ -20,13 +20,14 @@ function AllUsers() {
         fetch(`${USER_URL}/all`, options)
             .then((res) => res.json())
             .then((data) => {
+                console.log(data);
                 setUsers(data);
-            }).catch(() => {
+            })
+            .catch(() => {
                 //localStorage.removeItem("jwtToken");
                 //navigate("/");
             });
     }, []);
-
 
     const toggleUserDisable = (id) => {
         if (window.confirm(`Are you sure you want to disable user ${id}?`)) {
@@ -86,27 +87,30 @@ function AllUsers() {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.lenght > 0 && users.map((user) => {
-                            return (
-                                <tr key={user.userId}>
-                                    <td>{user.userId}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.username}</td>
-                                    <td>
-                                        <button
-                                            className="border border-black p-1 rounded-lg hover:bg-slate-200"
-                                            onClick={() =>
-                                                toggleUserDisable(user.userId)
-                                            }
-                                        >
-                                            {user.disabled
-                                                ? "Disabled"
-                                                : "Enabled"}
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                        {users.lenght > 0 &&
+                            users.map((user) => {
+                                return (
+                                    <tr key={user.userId}>
+                                        <td>{user.userId}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.username}</td>
+                                        <td>
+                                            <button
+                                                className="border border-black p-1 rounded-lg hover:bg-slate-200"
+                                                onClick={() =>
+                                                    toggleUserDisable(
+                                                        user.userId
+                                                    )
+                                                }
+                                            >
+                                                {user.disabled
+                                                    ? "Disabled"
+                                                    : "Enabled"}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
                 </table>
             </div>

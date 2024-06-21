@@ -1,73 +1,66 @@
 package learn.resume_builder.controllers;
 
-import learn.resume_builder.domain.Result;
-import learn.resume_builder.domain.UserService;
-import learn.resume_builder.models.User;
+import learn.resume_builder.models.AppUser;
 import learn.resume_builder.security.AppUserService;
 import learn.resume_builder.security.JwtConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.ValidationException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@CrossOrigin
-@RequestMapping("/api/auth")
+@RequestMapping("/api/user")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtConverter converter;
-    private final AppUserService service;
+    private final AppUserService appUserService;
 
-    @Autowired
-    public AuthController(AuthenticationManager authenticationManager, JwtConverter converter, AppUserService service) {
+    public AuthController(AuthenticationManager authenticationManager, JwtConverter converter, AppUserService appUserService) {
         this.authenticationManager = authenticationManager;
         this.converter = converter;
-        this.service = service;
+        this.appUserService = appUserService;
     }
 
-    @PostMapping("/login")//change this to login
-    public ResponseEntity<HashMap<String, String>> authenticate(@RequestBody User credentials) {
-        //before last change
+    @PostMapping("/authenticate")
+    public ResponseEntity<Map<String, String>> authenticate(@RequestBody Map<String, String> credentials) {
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(credentials.get("username"), credentials.get("password"));
 
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(authToken);
 
             if (authentication.isAuthenticated()) {
-
-                User user = service.findByUsername(credentials.getUsername());
-
-                String jwtToken = converter.getTokenFromUser(user);
-
+                String jwtToken = converter.getTokenFromUser((User) authentication.getPrincipal());
                 HashMap<String, String> map = new HashMap<>();
                 map.put("jwt_token", jwtToken);
-
                 return new ResponseEntity<>(map, HttpStatus.OK);
             }
-        } catch (Exception ex) {
-            System.out.println("Authentication failed: " + ex.getMessage());
+        } catch (AuthenticationException ex) {
+            System.out.println("Authentication failed: " + ex);
         }
 
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<Object> register (@RequestBody User credentials){
+    @PostMapping("/register")
+    public ResponseEntity<?> createAccount(@RequestBody Map<String, String> credentials){
+        AppUser appUser = null;
+
         try {
-            String username = credentials.getUsername();
-            String password = credentials.getPassword();
-            String email = credentials.getEmail();
+            String username = credentials.get("username");
+            String password = credentials.get("password");
 
-            User user = service.create(username, password, email);
-
+            appUser = appUserService.create(username, password);
         } catch (ValidationException ex) {
             return new ResponseEntity<>(List.of(ex.getMessage()), HttpStatus.BAD_REQUEST);
         } catch (DuplicateKeyException ex) {
@@ -75,8 +68,9 @@ public class AuthController {
         }
 
         // happy path...
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("appUserId", appUser.getAppUserId());
 
+        return new ResponseEntity<>(map, HttpStatus.CREATED);
     }
-
 }

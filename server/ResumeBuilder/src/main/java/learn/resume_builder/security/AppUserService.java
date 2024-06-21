@@ -1,35 +1,49 @@
 package learn.resume_builder.security;
 
 import learn.resume_builder.data.AppUserRepository;
+import learn.resume_builder.models.AppUser;
 import learn.resume_builder.models.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
 import java.util.List;
 
 @Service
-public class AppUserService{
+public class AppUserService implements UserDetailsService  {
     private final AppUserRepository repository;
     private final PasswordEncoder encoder;
 
-    public AppUserService(AppUserRepository repository,
-                          PasswordEncoder encoder) {
+    public AppUserService(AppUserRepository repository, PasswordEncoder encoder) {
         this.repository = repository;
         this.encoder = encoder;
     }
 
-    public User findByUsername(String name){return repository.findByUsername(name);}
+    public List<AppUser> findAll() {
+        return repository.findAll();
+    }
 
-    public User create(String username, String password, String email) {
+    @Override
+    @Transactional
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AppUser appUser = repository.findByUsername(username);
+        if(appUser == null || !appUser.isEnabled()) {
+            throw new UsernameNotFoundException(username + " not found");
+        }
+        return appUser;
+    }
+
+    public AppUser create(String username, String password) {
         validate(username);
         validatePassword(password);
 
         password = encoder.encode(password);
 
-        User appUser = new User(0, email, password, username);
+        AppUser appUser = new AppUser(0, username, password, false, List.of("User"));
 
         return repository.create(appUser);
     }

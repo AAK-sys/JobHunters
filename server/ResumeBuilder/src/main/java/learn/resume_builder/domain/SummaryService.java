@@ -1,7 +1,7 @@
 package learn.resume_builder.domain;
 
+import learn.resume_builder.data.AppUserRepository;
 import learn.resume_builder.data.SummaryRepository;
-import learn.resume_builder.data.UserRepository;
 import learn.resume_builder.models.Summary;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +14,9 @@ import java.util.Set;
 @Service
 public class SummaryService {
     private final SummaryRepository repository;
-    private final UserRepository userRepository;
+    private final AppUserRepository userRepository;
 
-    public SummaryService(SummaryRepository repository, UserRepository userRepository) {
+    public SummaryService(SummaryRepository repository, AppUserRepository userRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
     }

@@ -2,10 +2,9 @@ package learn.resume_builder.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import learn.resume_builder.data.UserJdbcTemplateRepository;
-import learn.resume_builder.models.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -17,21 +16,13 @@ import java.util.stream.Collectors;
 @Component
 public class JwtConverter {
 
-    UserJdbcTemplateRepository userRepo;
-
-
     private Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    private final String ISSUER = "resumeBuilder";
-    private final int EXPIRATION_MINUTES = 300;
+    private final String ISSUER = "resume-builder";
+    private final int EXPIRATION_MINUTES = 15;
     private final int EXPIRATION_MILLIS = EXPIRATION_MINUTES * 60 * 1000;
 
-    public JwtConverter(UserJdbcTemplateRepository userRepo) {
-        this.userRepo = userRepo;
-    }
-
     public String getTokenFromUser(User user) {
-
         String authorities = user.getAuthorities().stream()
                 .map(i -> i.getAuthority())
                 .collect(Collectors.joining(","));
@@ -51,7 +42,6 @@ public class JwtConverter {
             return null;
         }
         try {
-
             Jws<Claims> jws = Jwts.parserBuilder()
                     .requireIssuer(ISSUER)
                     .setSigningKey(key)
@@ -59,14 +49,15 @@ public class JwtConverter {
                     .parseClaimsJws(token.substring(7));
 
             String username = jws.getBody().getSubject();
+            String authStr = (String) jws.getBody().get("authorities");
+            List<GrantedAuthority> authorities = Arrays.stream(authStr.split(","))
+                    .map(i -> new SimpleGrantedAuthority(i))
+                    .collect(Collectors.toList());
 
-            return userRepo.findByUsername(username);
-
+            return new User(username, username, authorities);
         } catch (JwtException e) {
-
             System.out.println(e);
         }
-
         return null;
     }
 

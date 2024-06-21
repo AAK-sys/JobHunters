@@ -10,7 +10,6 @@ create table role(
 
 create table user(
     user_id int primary key auto_increment,
-    email varchar(320) unique not null,
     password_hash varchar(2048) not null,
     username varchar(50) unique not null,
     disabled boolean not null default false
@@ -132,11 +131,11 @@ begin
         ('USER'),
         ('ADMIN');
 
-    insert into user(email, password_hash, username)
+    insert into user(username, password_hash)
     values
-        ('BobMail@gmail.com', 'hashpassword', 'bobMail'),
-        ('MaryMail@gmail.com', 'hashpassword', 'maryMail'),
-        ('AdminMail@gmail.com', 'hashpassword', 'adminMail');
+        ('bobMail', 'hashpassword'),
+        ('maryMail', 'hashpassword'),
+        ("admin", "$2a$12$LjlnV4fw6.jh6n80.AUU1u5Cw70ZDzA3MEkQ5UbFUN/fsRtfDdeE2");
 
     insert into user_role(user_id, role_id)
     values

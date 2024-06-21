@@ -13,6 +13,7 @@ function Home() {
             navigate("/login");
         }
         const decodedData = jwtDecode(token);
+        console.log(decodedData);
         const options = {
             method: "GET",
             headers: {
@@ -30,6 +31,7 @@ function Home() {
                 }
             })
             .then((data) => {
+                console.log(data);
                 setUser(data);
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps

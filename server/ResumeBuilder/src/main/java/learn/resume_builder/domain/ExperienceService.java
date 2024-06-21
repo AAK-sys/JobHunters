@@ -1,7 +1,7 @@
 package learn.resume_builder.domain;
 
+import learn.resume_builder.data.AppUserRepository;
 import learn.resume_builder.data.ExperienceRepository;
-import learn.resume_builder.data.UserRepository;
 import learn.resume_builder.models.Experience;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +14,9 @@ import java.util.Set;
 @Service
 public class ExperienceService {
     private final ExperienceRepository repository;
-    private final UserRepository userRepository;
+    private final AppUserRepository userRepository;
 
-    public ExperienceService(ExperienceRepository repository, UserRepository userRepository) {
+    public ExperienceService(ExperienceRepository repository, AppUserRepository userRepository) {
         this.repository = repository;
         this.userRepository = userRepository;
     }

@@ -1,15 +1,23 @@
 package learn.resume_builder.data;
 
-import learn.resume_builder.models.User;
+import learn.resume_builder.models.AppUser;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public interface AppUserRepository {
     @Transactional
-    User findByUsername(String username);
+    List<AppUser> findAll();
 
     @Transactional
-    User create(User user);
+    public AppUser findById(int id);
 
     @Transactional
-    void update(User user);
+    AppUser findByUsername(String username);
+
+    @Transactional
+    AppUser create(AppUser user);
+
+    @Transactional
+    void update(AppUser user);
 }

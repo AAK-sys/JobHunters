@@ -11,10 +11,13 @@ function NavBar() {
 
     useEffect(() => {
         const token = localStorage.getItem("jwtToken");
+        if (token === null) {
+            navigate("/login");
+        }
         if (token !== null) {
             const decodedData = jwtDecode(token);
-            setIsAdmin(decodedData.authorities.includes("ADMIN"));
-            setIsUser(decodedData.authorities.includes("USER"));
+            setIsAdmin(decodedData.authorities === "ROLE_ADMIN");
+            setIsUser(decodedData.authorities === "ROLE_USER");
             console.log(token);
         }
     }, [token]);
@@ -31,13 +34,11 @@ function NavBar() {
                     <Link to={token ? "/home" : "/"}>Resume Builder</Link>
                 </h1>
                 <div className="w-1/3 flex justify-end">
-                    {!isAdmin && !isUser && (
+                    {!isAdmin && !isUser ? (
                         <Link className="nav-item" to={"/login"}>
                             Login
                         </Link>
-                    )}
-                    {/* // Navigation for admin */}
-                    {isUser && (
+                    ) : (
                         <>
                             {isAdmin && (
                                 <Link className="mx-4 nav-item" to={"/users"}>
