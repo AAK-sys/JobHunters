@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
 
 const USER_URL = "http://localhost:8080/api/user";
@@ -6,7 +7,7 @@ const USER_URL = "http://localhost:8080/api/user";
 function AllUsers() {
     const [users, setUsers] = useState([]);
     const [success, setSuccess] = useState("");
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const token = localStorage.getItem("jwtToken");
@@ -18,15 +19,26 @@ function AllUsers() {
         };
 
         fetch(`${USER_URL}/all`, options)
-            .then((res) => res.json())
+            .then((res) => {
+                if (res.status === 200) {
+                    return res.json();
+                } else if (res.status === 403) {
+                    navigate("/");
+                } else {
+                    return Promise.reject(
+                        `Unexpected status code ${res.status}`
+                    );
+                }
+            })
             .then((data) => {
+                console.log(data);
                 setUsers(data);
-            }).catch(() => {
+            })
+            .catch(() => {
                 //localStorage.removeItem("jwtToken");
                 //navigate("/");
             });
     }, []);
-
 
     const toggleUserDisable = (id) => {
         if (window.confirm(`Are you sure you want to disable user ${id}?`)) {
@@ -86,27 +98,30 @@ function AllUsers() {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.lenght > 0 && users.map((user) => {
-                            return (
-                                <tr key={user.userId}>
-                                    <td>{user.userId}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.username}</td>
-                                    <td>
-                                        <button
-                                            className="border border-black p-1 rounded-lg hover:bg-slate-200"
-                                            onClick={() =>
-                                                toggleUserDisable(user.userId)
-                                            }
-                                        >
-                                            {user.disabled
-                                                ? "Disabled"
-                                                : "Enabled"}
-                                        </button>
-                                    </td>
-                                </tr>
-                            );
-                        })}
+                        {users.length > 0 &&
+                            users.map((user) => {
+                                return (
+                                    <tr key={user.userId}>
+                                        <td>{user.userId}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.username}</td>
+                                        <td>
+                                            <button
+                                                className="border border-black p-1 rounded-lg hover:bg-slate-200"
+                                                onClick={() =>
+                                                    toggleUserDisable(
+                                                        user.userId
+                                                    )
+                                                }
+                                            >
+                                                {user.disabled
+                                                    ? "Disabled"
+                                                    : "Enabled"}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                     </tbody>
                 </table>
             </div>
