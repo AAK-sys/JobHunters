@@ -60,11 +60,11 @@ h4 {
     background-color: #c6def1;
 }
 
-.experience-button {
+.experience-button, .deleteBtn {
     background-color: #dbcdf0;
 }
 
-.skill-button, .deleteBtn {
+.skill-button {
     background-color: #f2c6de;
 }
 

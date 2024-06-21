@@ -199,11 +199,6 @@ function Create() {
                                 label="name"
                                 idString="skillId"
                             />
-                            <BuilderButton
-                                className="skill-button"
-                                icon={faPlus}
-                                text="Add Skill"
-                            />
                         </div>
                     )}
                 </div>
