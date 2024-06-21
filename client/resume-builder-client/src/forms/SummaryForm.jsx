@@ -30,10 +30,13 @@ function SummaryForm({ formData, setFormData, handleChange, setOptions, setSelec
 
         fetch(`${URL}`, options)
             .then((res) => {
-                console.log(res.status);
                 if (res.status === 204) {
+                    alert("your data has been updated")
                     return null;
-                } else if (res.status === 201 || res.status === 400) {
+                } else if (res.status === 201) {
+                    alert("your data has been added");
+                    return res.json();
+                }else if(res.status === 400){
                     return res.json();
                 } else {
                     return Promise.reject(
@@ -43,7 +46,8 @@ function SummaryForm({ formData, setFormData, handleChange, setOptions, setSelec
             })
             .then((data) => {
                 if (data && !data.summaryId) {
-                    alert(data);
+                    alert(data); //an error occured
+                    return;
                 }else if(data){ //add
                     setOptions(prevOptions => {
                         const newOption = { value: data.summaryId, label: data.displayName };
@@ -59,7 +63,9 @@ function SummaryForm({ formData, setFormData, handleChange, setOptions, setSelec
                     const newInformation = information;
                     newInformation[0] = defaultSummary;
                     setFormData(defaultSummary);
-                    setInformation(newInformation);}
+                    setInformation(newInformation);
+                }
+                    
 
             })
             .catch((e) => {

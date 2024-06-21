@@ -31,7 +31,6 @@ function AllUsers() {
                 }
             })
             .then((data) => {
-                console.log(data);
                 setUsers(data);
             })
             .catch(() => {
