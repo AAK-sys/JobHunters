@@ -1,7 +1,19 @@
 import { useState } from "react";
 
-function ExperienceForm({ formData, handleChange }) {
+function ExperienceForm({ formData, setFormData, handleChange, setOptions, setSelected, information, setInformation }) {
+    
     const [prepareForChange, setPrepareForChange] = useState(false);
+    
+    const defaultExperience = {
+        experienceId: 0,
+        displayName: "",
+        company: "",
+        role: "",
+        startDate: "",
+        endDate: "",
+        description: "",
+        userId: formData.userId
+    }
 
     const EXP_URL =
         formData.experienceId === 0
@@ -15,7 +27,7 @@ function ExperienceForm({ formData, handleChange }) {
     const addOrUpdate = (e) => {
         e.preventDefault();
         const token = localStorage.getItem("jwtToken");
-        const options = {
+        const init = {
             method: formData.experienceId === 0 ? "POST" : "PUT",
             headers: {
                 Authorization: "Bearer " + token,
@@ -24,7 +36,7 @@ function ExperienceForm({ formData, handleChange }) {
             body: JSON.stringify(formData),
         };
 
-        fetch(`${EXP_URL}`, options)
+        fetch(`${EXP_URL}`, init)
             .then((res) => {
                 if (res.status === 201) {
                     alert(`your data has been Added`);
@@ -37,6 +49,22 @@ function ExperienceForm({ formData, handleChange }) {
             .then((data) => {
                 if (data && !data.experienceId) {
                     alert(data);
+                }else if(data){ //add
+                    setOptions(prevOptions => {
+                        const newOption = { value: data.experienceId, label: data.displayName };
+                        const lastOption = prevOptions[prevOptions.length - 1];
+                        return [...prevOptions.slice(0, -1), newOption, lastOption];
+                    });
+                    setInformation(prevInfo => {
+                        const entries = Object.entries(prevInfo);
+                        const lastEntry = entries.pop();
+                        const newEntries = [...entries, [data.experienceId, data], lastEntry];
+                        return Object.fromEntries(newEntries);
+                    })
+                    const newInformation = information;
+                    newInformation[0] = defaultExperience;
+                    setFormData(defaultExperience);
+                    setInformation(newInformation);
                 }
             })
             .catch((e) => {
@@ -44,6 +72,11 @@ function ExperienceForm({ formData, handleChange }) {
     };
 
     const deleteExp = () => {
+        const id = formData.experienceId;
+        const goAhead = window.confirm(`permenatly delete ${formData.displayName}?`);
+        if(!goAhead){
+            return;
+        }
         const token = localStorage.getItem("jwtToken");
         const options = {
             method: "Delete",
@@ -55,7 +88,26 @@ function ExperienceForm({ formData, handleChange }) {
         fetch(`${EXP_URL}`, options)
             .then((res) => {
                 if (res.status === 204) {
-                    alert(`your data has been deleted`);
+                    setOptions(prevOptions => {
+                        // Filter out the option with the specified id
+                        const updatedOptions = prevOptions.filter(option => option.value !== id);
+                        return updatedOptions;
+                    });
+                    
+                    setInformation(prevInfo => {
+                        // Filter out the entry with the specified id
+                        const newEntries = Object.fromEntries(
+                            Object.entries(prevInfo).filter(([key]) => key !== id)
+                        );
+                        return newEntries;
+                    });
+                    
+                    // Reset the form and set additional state if needed
+                    setSelected( prevSelected => {
+                        prevSelected.value=-1;
+                        prevSelected.label = 'Select an option';
+                    });
+
                 }
 
                 return res.json();
@@ -63,6 +115,7 @@ function ExperienceForm({ formData, handleChange }) {
             .then((data) => {
                 if (data) {
                     alert(data);
+                }else if(!data){
                 }
             })
             .catch((e) => {
@@ -210,7 +263,7 @@ function ExperienceForm({ formData, handleChange }) {
                     )}
                     <button
                         type="submit"
-                        name="wildcard"
+                        name="addOrupdate"
                         onClick={addOrUpdate}
                         className={buttonClass}
                     >

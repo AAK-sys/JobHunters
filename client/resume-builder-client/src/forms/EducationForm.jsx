@@ -1,8 +1,21 @@
 import { useState } from "react";
 import { jwtDecode } from "jwt-decode";
 
-function EducationForm({ formData, handleChange }) {
+function EducationForm({ formData, setFormData, handleChange, setOptions, setSelected, information, setInformation }) {
+    
     const [prepareForChange, setPrepareForChange] = useState(false);
+
+            const defaultEducation = {
+            educationId: 0,
+            universityName: "",
+            degree: "",
+            major: "",
+            gpa: "",
+            startDate: "",
+            endDate: "",
+            description: "",
+            userId: formData.userId,
+        };
 
     const buttonClass = !prepareForChange
         ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
@@ -26,17 +39,31 @@ function EducationForm({ formData, handleChange }) {
                 .then((res) => {
                     if (res.status === 201) {
                         alert(
-                            `your data has been ${
-                                res.status === 201 ? "Added" : "updated"
-                            }`
+                            `your data has been Added`
                         );
                     }
     
                     return res.json();
                 })
                 .then((data) => {
-                    if(data && !data.userInfoId){
+                    if(data && !data.educationId){
                         alert(data);
+                    }else if(data){
+                        setOptions(prevOptions => {
+                            const newOption = { value: data.educationId, label: data.universityName };
+                            const lastOption = prevOptions[prevOptions.length - 1];
+                            return [...prevOptions.slice(0, -1), newOption, lastOption];
+                        });
+                        setInformation(prevInfo => {
+                            const entries = Object.entries(prevInfo);
+                            const lastEntry = entries.pop();
+                            const newEntries = [...entries, [data.educationId, data], lastEntry];
+                            return Object.fromEntries(newEntries);
+                        })
+                        const newInformation = information;
+                        newInformation[0] = defaultEducation;
+                        setFormData(defaultEducation);
+                        setInformation(newInformation);
                     }
                 })
                 .catch((e) => {
@@ -96,7 +123,15 @@ function EducationForm({ formData, handleChange }) {
     }
 
     const handelDelete = (e) => {
+
+        const id = formData.educationId;
+        
         const url = `http://localhost:8080/api/education/${formData.educationId}`
+
+        const goAhead = window.confirm(`permenatly this education entry ${formData.universityName}?`);
+        if(!goAhead){
+            return;
+        }
     
             const token = localStorage.getItem("jwtToken");
             const options = {
@@ -111,9 +146,25 @@ function EducationForm({ formData, handleChange }) {
             fetch(url, options)
                 .then((res) => {
                     if (res.status === 204) {
-                        alert(
-                            `your data has been deleted`
-                        );
+                        setOptions(prevOptions => {
+                            // Filter out the option with the specified id
+                            const updatedOptions = prevOptions.filter(option => option.value !== id);
+                            return updatedOptions;
+                        });
+                        
+                        setInformation(prevInfo => {
+                            // Filter out the entry with the specified id
+                            const newEntries = Object.fromEntries(
+                                Object.entries(prevInfo).filter(([key]) => key !== id)
+                            );
+                            return newEntries;
+                        });
+                        
+                        // Reset the form and set additional state if needed
+                        setSelected( prevSelected => {
+                            prevSelected.value=-1;
+                            prevSelected.label = 'Select an option';
+                        });
                     }else{
                         
                     }

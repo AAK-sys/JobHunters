@@ -1,7 +1,14 @@
 import { useState } from "react";
 
-function SummaryForm({ formData, handleChange, options, setOptions }) {
+function SummaryForm({ formData, setFormData, handleChange, setOptions, setSelected, information, setInformation }) {
     const [prepareForChange, setPrepareForChange] = useState(false);
+
+    const defaultSummary = {
+        summaryId: 0,
+        displayName: "",
+        description: "",
+        userId: formData.userId
+    };
 
     const URL =
         formData.summaryId === 0
@@ -43,14 +50,24 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                 }
             })
             .then((data) => {
-                console.log(data);
-                if (!data) {
-                    alert("Updated Form");
-                } else if (data.summaryId) {
-                    alert("Added Summary");
-                } else {
-                    alert("Errors");
-                }
+                if (data && !data.summaryId) {
+                    alert(data);
+                }else if(data){ //add
+                    setOptions(prevOptions => {
+                        const newOption = { value: data.summaryId, label: data.displayName };
+                        const lastOption = prevOptions[prevOptions.length - 1];
+                        return [...prevOptions.slice(0, -1), newOption, lastOption];
+                    });
+                    setInformation(prevInfo => {
+                        const entries = Object.entries(prevInfo);
+                        const lastEntry = entries.pop();
+                        const newEntries = [...entries, [data.summaryId, data], lastEntry];
+                        return Object.fromEntries(newEntries);
+                    })
+                    const newInformation = information;
+                    newInformation[0] = defaultSummary;
+                    setFormData(defaultSummary);
+                    setInformation(newInformation);}
 
             })
             .catch((e) => {
@@ -59,6 +76,12 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
     };
 
     const deleteExp = (e) => {
+        const id = formData.summaryId;
+        const goAhead = window.confirm(`permenatly delete ${formData.displayName}?`);
+        if(!goAhead){
+            return;
+        }
+
         e.preventDefault();
         const token = localStorage.getItem("jwtToken");
         const options = {
@@ -71,7 +94,25 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
         fetch(`${URL}`, options)
             .then((res) => {
                 if (res.status === 204) {
-                    alert(`your data has been deleted`);
+                    setOptions(prevOptions => {
+                        // Filter out the option with the specified id
+                        const updatedOptions = prevOptions.filter(option => option.value !== id);
+                        return updatedOptions;
+                    });
+                    
+                    setInformation(prevInfo => {
+                        // Filter out the entry with the specified id
+                        const newEntries = Object.fromEntries(
+                            Object.entries(prevInfo).filter(([key]) => key !== id)
+                        );
+                        return newEntries;
+                    });
+                    
+                    // Reset the form and set additional state if needed
+                    setSelected( prevSelected => {
+                        prevSelected.value=-1;
+                        prevSelected.label = 'Select an option';
+                    });
                 }
 
                 return res.json();

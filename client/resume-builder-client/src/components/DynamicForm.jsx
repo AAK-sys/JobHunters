@@ -32,7 +32,7 @@ const DynamicForm = ({
                 <h2 className="text-xl font-semibold text-gray-700 mr-3">
                     {title}
                 </h2>
-                <DropDown options={options} onSelect={handleChange} />
+                <DropDown options={options} onSelect={handleChange} selectedOption={selectedOption} />
             </div>
             <div className="mt-4">
                 <div className="rounded-xl text-lg bg-white">
@@ -42,6 +42,10 @@ const DynamicForm = ({
                             handleChange={handleInputChange}
                             options={options}
                             setOptions={setOptions}
+                            setInformation = {setInformation}
+                            information = {information}
+                            setSelected={setSelectedOption}
+                            onSelectChange={handleChange}
                         />
                     )}
                 </div>
