@@ -12,7 +12,8 @@ function ExperienceForm({ formData, handleChange }) {
         ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
         : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
 
-    const addOrUpdate = () => {
+    const addOrUpdate = (e) => {
+        e.preventDefault();
         const token = localStorage.getItem("jwtToken");
         const options = {
             method: formData.experienceId === 0 ? "POST" : "PUT",
@@ -34,12 +35,11 @@ function ExperienceForm({ formData, handleChange }) {
                 return res.json();
             })
             .then((data) => {
-                if (data) {
+                if (data && !data.experienceId) {
                     alert(data);
                 }
             })
             .catch((e) => {
-                alert(e);
             });
     };
 
@@ -89,7 +89,7 @@ function ExperienceForm({ formData, handleChange }) {
                         type="text"
                         id="displayName"
                         name="displayName"
-                        value={formData.displayName}
+                        value={formData.displayName || ''}
                         onChange={registerChange}
                         placeholder="Enter display name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -107,7 +107,7 @@ function ExperienceForm({ formData, handleChange }) {
                         type="text"
                         id="companyName"
                         name="companyName"
-                        value={formData.companyName}
+                        value={formData.companyName || ''}
                         onChange={registerChange}
                         placeholder="Enter company name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -125,7 +125,7 @@ function ExperienceForm({ formData, handleChange }) {
                         type="text"
                         id="role"
                         name="role"
-                        value={formData.role}
+                        value={formData.role || ''}
                         onChange={registerChange}
                         placeholder="Enter your role"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -144,7 +144,7 @@ function ExperienceForm({ formData, handleChange }) {
                             type="date"
                             id="startDate"
                             name="startDate"
-                            value={formData.startDate}
+                            value={formData.startDate || ''}
                             onChange={registerChange}
                             placeholder="MM/YYYY"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -161,7 +161,7 @@ function ExperienceForm({ formData, handleChange }) {
                             type="date"
                             id="endDate"
                             name="endDate"
-                            value={formData.endDate}
+                            value={formData.endDate || ''}
                             onChange={registerChange}
                             placeholder="MM/YYYY"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"

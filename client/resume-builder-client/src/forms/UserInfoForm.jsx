@@ -9,8 +9,42 @@ function UserInfoForm({ formData, setFormData }) {
         ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
         : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
 
-    const handelUpdate = (e) => {
-        e.preventDefault();
+    const handelAdd =  () => {
+        
+        const url = "http://localhost:8080/api/userinfo";
+
+        const token = localStorage.getItem("jwtToken");
+        const options = {
+            method: "POST",
+            headers: {
+                Authorization: "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        };
+
+        fetch(`${url}`, options)
+            .then((res) => {
+                if (res.status === 201) {
+                    alert(
+                        `your data has been ${
+                            res.status === 201 ? "Added" : "updated"
+                        }`
+                    );
+                }
+
+                return res.json();
+            })
+            .then((data) => {
+                if(data && !data.userInfoId){
+                    alert(data);
+                }
+            })
+            .catch((e) => {
+            });
+    };
+
+    const handelUpdate = () => {
 
         const token = localStorage.getItem("jwtToken");
         const options = {
@@ -21,8 +55,6 @@ function UserInfoForm({ formData, setFormData }) {
             },
             body: JSON.stringify(formData),
         };
-
-        console.log(formData);
 
         fetch(`${EXP_URL}`, options)
             .then((res) => {
@@ -42,7 +74,6 @@ function UserInfoForm({ formData, setFormData }) {
                 }
             })
             .catch((e) => {
-                //alert(e);
             });
     };
 
@@ -57,10 +88,16 @@ function UserInfoForm({ formData, setFormData }) {
 
     const handelSubmit = (event) => {
         event.preventDefault();
+
+        if(formData.userInfoId === 0){// add
+            handelAdd();
+        }else{
+            handelUpdate();
+        }
     };
 
     return (
-        <div className="w-[45%] m-3 shadow rounded-lg p-4">
+        <div className="m-3 shadow rounded-lg p-4">
             <form
                 className="p-3 pt-4 bg-white rounded-md"
                 onSubmit={handelSubmit}
@@ -137,7 +174,6 @@ function UserInfoForm({ formData, setFormData }) {
                 </div>
                 <div className="flex justify-end">
                     <button
-                        onClick={handelUpdate}
                         type="submit"
                         className={buttonClass}
                     >

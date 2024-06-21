@@ -8,33 +8,142 @@ function EducationForm({ formData, handleChange }) {
         ? "transition ease-in duration-1000 text-black bg-gray-500 px-4 py-2 rounded-md"
         : "transition ease-in duration-1000 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600";
 
-    const submitRequest = (event) => {
-        event.preventDefault();
-        console.log(formData.educationId === 0 ? "Add" : "edit", formData);
-    };
+        const handelAdd =  () => {
+        
+            const url = "http://localhost:8080/api/education";
+    
+            const token = localStorage.getItem("jwtToken");
+            const options = {
+                method: "POST",
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            };
+    
+            fetch(`${url}`, options)
+                .then((res) => {
+                    if (res.status === 201) {
+                        alert(
+                            `your data has been ${
+                                res.status === 201 ? "Added" : "updated"
+                            }`
+                        );
+                    }
+    
+                    return res.json();
+                })
+                .then((data) => {
+                    if(data && !data.userInfoId){
+                        alert(data);
+                    }
+                })
+                .catch((e) => {
+                });
+        };
+    
+        const handelUpdate = () => {
+
+            const url = `http://localhost:8080/api/education/${formData.educationId}`
+    
+            const token = localStorage.getItem("jwtToken");
+            const options = {
+                method: "PUT",
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            };
+    
+            fetch(url, options)
+                .then((res) => {
+                    if (res.status === 204) {
+                        alert(
+                            `your data has been ${
+                                res.status === 201 ? "Added" : "updated"
+                            }`
+                        );
+                    }
+    
+                    return res.json();
+                })
+                .then((data) => {
+                    if (data) {
+                        alert(data);
+                    }
+                })
+                .catch((e) => {
+
+                });
+        };
 
     const registerChange = (event) => {
         handleChange(event);
         setPrepareForChange(true);
     };
 
+    const handelSubmit = (e) => {
+
+        e.preventDefault();
+
+        if(formData.educationId === 0 ){
+            handelAdd();
+        }else{
+            handelUpdate();
+        }
+    }
+
+    const handelDelete = (e) => {
+        const url = `http://localhost:8080/api/education/${formData.educationId}`
+    
+            const token = localStorage.getItem("jwtToken");
+            const options = {
+                method: "Delete",
+                headers: {
+                    Authorization: "Bearer " + token,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            };
+    
+            fetch(url, options)
+                .then((res) => {
+                    if (res.status === 204) {
+                        alert(
+                            `your data has been deleted`
+                        );
+                    }else{
+                        
+                    }
+    
+                    return res.json();
+                })
+                .then((data) => {
+                })
+                .catch((e) => {
+
+                });
+    }
+
     return (
         <div className="w-auto p-2">
-            <form className="bg-white rounded-md" onSubmit={submitRequest}>
+            <form className="bg-white rounded-md" onSubmit={handelSubmit}>
                 <div className="mb-4">
                     <label
-                        htmlFor="institution"
+                        htmlFor="universityName"
                         className="block text-sm font-medium text-gray-700 mb-1"
                     >
                         Institution
                     </label>
                     <input
                         type="text"
-                        id="institution"
-                        name="institution"
-                        value={formData.universityName}
+                        id="universityName"
+                        name="universityName"
+                        value={formData.universityName || ''}
                         onChange={registerChange}
-                        placeholder="Enter Institution"
+                        placeholder="Enter an Institution name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                     />
                 </div>
@@ -45,13 +154,13 @@ function EducationForm({ formData, handleChange }) {
                             htmlFor="degree"
                             className="block text-sm font-medium text-gray-700 mb-1"
                         >
-                            Start Date
+                            Degree
                         </label>
                         <input
                             type="text"
                             id="degree"
                             name="degree"
-                            value={formData.degree /*maybe a drop down later*/}
+                            value={formData.degree ||''}
                             onChange={registerChange}
                             placeholder="B.S."
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -62,13 +171,13 @@ function EducationForm({ formData, handleChange }) {
                             htmlFor="major"
                             className="block text-sm font-medium text-gray-700 mb-1"
                         >
-                            End Date (if applicable)
+                            Major
                         </label>
                         <input
                             type="text"
                             id="major"
                             name="major"
-                            value={formData.major}
+                            value={formData.major || ''}
                             onChange={registerChange}
                             placeholder="Computer Science"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -81,14 +190,14 @@ function EducationForm({ formData, handleChange }) {
                         htmlFor="gpa"
                         className="block text-sm font-medium text-gray-700 mb-1"
                     >
-                        Company Name
+                        gpa
                     </label>
                     <input
                         type="number"
                         step="0.01"
                         id="gpa"
                         name="gpa"
-                        value={formData.gpa}
+                        value={formData.gpa || ''}
                         onChange={registerChange}
                         placeholder="4.0"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -104,10 +213,10 @@ function EducationForm({ formData, handleChange }) {
                             Start Date
                         </label>
                         <input
-                            type="text"
+                            type="date"
                             id="startDate"
                             name="startDate"
-                            value={formData.startDate}
+                            value={formData.startDate || ''}
                             onChange={registerChange}
                             placeholder="01/01/2000"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -115,16 +224,16 @@ function EducationForm({ formData, handleChange }) {
                     </div>
                     <div className="flex-1">
                         <label
-                            htmlFor="major"
+                            htmlFor="endDate"
                             className="block text-sm font-medium text-gray-700 mb-1"
                         >
                             End Date (if applicable)
                         </label>
                         <input
-                            type="text"
-                            id="major"
-                            name="major"
-                            value={formData.endDate}
+                            type="date"
+                            id="endDate"
+                            name="endDate"
+                            value={formData.endDate || ''}
                             onChange={registerChange}
                             placeholder="01/01/2004"
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -142,11 +251,7 @@ function EducationForm({ formData, handleChange }) {
                     <textarea
                         id="description"
                         name="description"
-                        value={
-                            formData.description === null
-                                ? ""
-                                : formData.description
-                        }
+                        value={formData.description || ''}
                         onChange={registerChange}
                         placeholder="Describe your role and responsibilities"
                         rows="3"
@@ -161,17 +266,17 @@ function EducationForm({ formData, handleChange }) {
                             : "flex justify-end"
                     }
                 >
-                    {(formData.educationId && (
+                    {(formData.educationId>0 && (
                         <button
                             type="button"
+                            onClick={handelDelete}
                             className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600"
                         >
                             Delete
                         </button>
-                    )) ||
-                        ""}
+                    ))}
                     <button type="submit" className={buttonClass}>
-                        {formData.role === ""
+                        {formData.educationId === 0
                             ? "add new education"
                             : "confirm changes"}
                     </button>

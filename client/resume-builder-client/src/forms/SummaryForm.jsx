@@ -48,15 +48,13 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                     alert("Updated Form");
                 } else if (data.summaryId) {
                     alert("Added Summary");
-                    // setOptions([...options, data]);
                 } else {
                     alert("Errors");
                 }
-                // alert(data, "hello from data");
-                // console.log(data);
+
             })
             .catch((e) => {
-                //alert(e);
+
             });
     };
 
@@ -84,7 +82,6 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                 }
             })
             .catch((e) => {
-                //alert(e); will revist with time.
             });
     };
 
@@ -102,7 +99,7 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                         type="text"
                         id="displayName"
                         name="displayName"
-                        value={formData.displayName}
+                        value={formData.displayName || ''}
                         onChange={registerChange}
                         placeholder="Enter display name"
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
@@ -119,7 +116,7 @@ function SummaryForm({ formData, handleChange, options, setOptions }) {
                     <textarea
                         id="description"
                         name="description"
-                        value={formData.description}
+                        value={formData.description || ''}
                         onChange={registerChange}
                         placeholder="who are you?"
                         rows="3"
