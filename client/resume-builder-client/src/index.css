@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    max-width: 100%;
+}
+
+body {
+    line-height: 1.5;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    letter-spacing: 1.5px;
+}
+
+.all-users th,
+.all-users td {
+    border: 1px solid;
+    padding: 1%;
+    text-align: center;
+}
+
+.all-users th {
+    width: 200px;
+}
+
+.nav-item {
+    padding: 1% 3%;
+    border: solid 1px #dddddd;
+    border-radius: 0.5rem;
+    transition: 300ms;
+}
+
+.nav-item:hover {
+    background-color: rgba(226, 232, 240, 0.8);
+}
+
+.builder-dropdown,
+.builder-info {
+    width: 80%;
+    margin: auto;
+}
+
+.profile-button {
+    background-color: #faedcb;
+}
+
+.summary-button {
+    background-color: #c9e4de;
+}
+
+.education-button, .submitBtn {
+    background-color: #c6def1;
+}
+
+.experience-button, .deleteBtn {
+    background-color: #dbcdf0;
+}
+
+.skill-button {
+    background-color: #f2c6de;
+}
+
+.sign-up-button {
+    background-color: #f7d9c4;
+
+}
+
